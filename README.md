@@ -1,7 +1,7 @@
 # tijos-hardware-example
 TiJOS examples for sensor and peripheral, it demonstrates how to access the hardware resources of MCU.
 
-# TiJOS相关例程说明说明
+# TiJOS 外设操作相关例程说明
 
 ## 目录构成：
 
