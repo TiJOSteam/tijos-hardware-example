@@ -52,13 +52,16 @@ public class HCSR04 {
 
 		while(true){
 			int err = hcsr04.measure();
-			if(err<0){
+			if(err < 0) {
 				System.out.println("Error = "+ err);
 			}
 			else
 			{
 				double distance = hcsr04.getDistance();
-				System.out.println("Distance = "+ distance+" m");
+				if(distance < 0)
+					System.out.println("Distance invalid.");
+				else	
+					System.out.println("Distance = "+ distance+" m");
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {

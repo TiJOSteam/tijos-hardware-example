@@ -70,6 +70,8 @@ public class MQ2 {
 		/*
 		 * 资源绑定，
 		 * 创建TiMQ2对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定
+		 * Pin0<---->D0
+		 * ADC <---->A0
 		 */	
 		TiMQ2 mq2 = new TiMQ2(gpio0, gpioPin0, adc0);
 		/*

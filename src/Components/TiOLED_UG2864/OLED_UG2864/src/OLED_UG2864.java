@@ -46,37 +46,53 @@ public class OLED_UG2864 {
 		String s2 = "TiKit";
 		while(true) {
 			/*给屏幕上电*/
-			oled12864.turnOn();
+			boolean err = oled12864.turnOn();
+			if(!err) {
+				System.out.println("oled turnOn fail");
+				break;
+			}
 			System.out.println("oled is turned on");
 			/*清屏*/
-			oled12864.clear();
+			err = oled12864.clear();
+			if(!err) 
+				System.out.println("oled clear fail");
 			/*从第0行0列开始打印字符串*/
-			oled12864.print(0, 0, s0);
+			err = oled12864.print(0, 0, s0);
+			if(!err) 
+				System.out.println("oled print fail");
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 			}	
-			oled12864.clear();
+			err = oled12864.clear();
+			if(!err) 
+				System.out.println("oled clear fail");
 			/*设置行起始坐标和列起始坐标*/
 			oled12864.setPosition(1, 2);
 			/*在指定位置输出字符串*/
-			oled12864.output(s1);
-			
+			err = oled12864.output(s1);
+			if(!err) 
+				System.out.println("oled output fail");			
 			oled12864.setPosition(3, 11);
-			oled12864.output(s2);
+			err = oled12864.output(s2);
+			if(!err) 
+				System.out.println("oled output fail");	
 			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {			
 			}
-			oled12864.clear();
+			err = oled12864.clear();
+			if(!err) 
+				System.out.println("oled clear fail");
 			/*关闭屏幕*/
-			oled12864.turnOff();
-			System.out.println("oled is turned off");
+			err = oled12864.turnOff();
+			if(!err) 
+				System.out.println("oled turnOff fail");
+			else
+				System.out.println("oled is turned off");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-			
 			}		
 		}
 	}
