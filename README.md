@@ -1,6 +1,21 @@
 # tijos-hardware-example
 TiJOS examples for sensor and peripheral, it demonstrates how to access the hardware resources of MCU.
 
+
+# More Resources
+
+| Name                                     | Url                                      |
+| ---------------------------------------- | ---------------------------------------- |
+| TiJOS Web Site                           | <http://www.tijos.net>                   |
+| TiJOS Community                          | <http://bbs.tijos.net>                   |
+| TiJOS Introduction                       | <http://dev.tijos.net/overview>          |
+| TiJOS Application Development Guide      | <http://dev.tijos.net/manual>            |
+| TiJOS JDK API Document                   | <http://dev.tijos.net/javadoc>           |
+| TiJOS JDK Software Examples              | <https://github.com/tijosnet/tijos-software-example> |
+| TiJOS Hardware Access Examples           | <https://github.com/tijosnet/tijos-hardware-example> |
+| TiKit-T600-ESP8266A Development Kit Manual | <http://dev.tijos.net/tikit/tikit-t600-esp8266a/> |
+|                                          |                                          |
+
 # TiJOS 外设操作相关例程说明
 
 ## 目录构成：
