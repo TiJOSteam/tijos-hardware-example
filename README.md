@@ -10,6 +10,7 @@ TiJOS examples for sensor and peripheral, it demonstrates how to access the hard
 | TiJOS Community                          | <http://bbs.tijos.net>                   |
 | TiJOS Introduction                       | <http://dev.tijos.net/overview>          |
 | TiJOS Application Development Guide      | <http://dev.tijos.net/manual>            |
+| TiJOS Development Enviornment Setup Guide | <http://dev.tijos.net/setup>             |
 | TiJOS JDK API Document                   | <http://dev.tijos.net/javadoc>           |
 | TiJOS JDK Software Examples              | <https://github.com/tijosnet/tijos-software-example> |
 | TiJOS Hardware Access Examples           | <https://github.com/tijosnet/tijos-hardware-example> |
@@ -60,6 +61,7 @@ TiJOS examples for sensor and peripheral, it demonstrates how to access the hard
 | 钛极OS开发者社区                    | <http://bbs.tijos.net>                   |      |
 | 钛极OS(TiJOS)物联网操作系统介绍         | <http://dev.tijos.net/overview>          |      |
 | 钛极OS(TiJOS)应用开发指南            | <http://dev.tijos.net/manual>            |      |
+| 钛极OS(TiJOS)开发环境搭建向导               | <http://dev.tijos.net/setup>             |
 | 钛极OS(TiJOS) JDK 常用功能例程       | <https://github.com/tijosnet/tijos-software-example> |      |
 | 钛极OS(TiJOS) 外设操作例程           | <https://github.com/tijosnet/tijos-hardware-example> |      |
 | 钛极OS(TiJOS) JDK API文档        | <http://dev.tijos.net/javadoc>           |      |

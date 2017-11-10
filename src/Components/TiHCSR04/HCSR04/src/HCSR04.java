@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.sensor.distance.TiHCSR04;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.sensor.distance.TiHCSR04;
 
 /**
  * 此类实现TiHCSR04超声波测距传感器测量距离的功能演示<br>
@@ -28,14 +28,10 @@ public class HCSR04 {
 		int gpioPin0 = 0;
 		int gpioPin1 = 1;
 		/*
-		 * 定义使用的TiGPIO的pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0, gpioPin1};
-		/*
 		 * 资源分配，
-		 * 将gpioPort0与pinIDList分配给TiGPIO的对象gpio0
+		 * 将gpioPort0与gpioPin0/1分配给TiGPIO的对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0, gpioPin1);
 		/*
 		 * 资源绑定，
 		 * 创建TiHCSR04的对象hcsr04并将gpio0和gpioPin0和gpioPin1与其绑定
@@ -63,7 +59,7 @@ public class HCSR04 {
 				else	
 					System.out.println("Distance = "+ distance+" m");
 				try {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
 			}	

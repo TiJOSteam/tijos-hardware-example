@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.transducer.buzzer.TiBuzzer;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.transducer.buzzer.TiBuzzer;
 
 /**
  * 此类实现TiBuzzer蜂鸣器控制功能演示<br>
@@ -26,21 +26,16 @@ public class Buzzer {
 		 */
 		int gpioPin0 = 0;
 		/*
-		 * 定义使用的TiGPIO的pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0};
-		/*
 		 * 资源分配，
-		 * 将gpioPort0与pinIDList分配给TiGPIO的对象gpio0
+		 * 将gpioPort0与gpioPin0分配给TiGPIO的对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 		/*
 		 * 资源绑定，
 		 * 创建TiBuzzer的对象buzzer并将gpio0和gpioPin0与其绑定
 		 * 默认使用低电平控制蜂鸣器开启
 		 */	
-		TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin0, false);
-
+		TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin0);
 		/*
 		 * 资源使用，
 		 * 控制蜂鸣器开启和关闭

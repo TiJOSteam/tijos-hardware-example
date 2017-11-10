@@ -1,12 +1,12 @@
-import tijos.runtime.deviceaccess.TiI2CMaster;
+import tijos.framework.devicecenter.TiI2CMaster;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.sensor.humiture.TiDHT;
+import tijos.framework.sensor.distance.TiHCSR04;
+import tijos.framework.transducer.buzzer.TiBuzzer;
+import tijos.framework.sensor.button.TiButton;
+import tijos.framework.sensor.button.ITiButtonEventListener;
 import java.text.DecimalFormat;
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.transducer.led.TiOLED_UG2864;
-import tijos.runtime.sensor.humiture.TiDHT;
-import tijos.runtime.sensor.distance.TiHCSR04;
-import tijos.runtime.transducer.buzzer.TiBuzzer;
-import tijos.runtime.sensor.button.TiButton;
-import tijos.runtime.sensor.button.TiButtonEventListener;
 
 /* 
  * 实现按钮监听接口<br>
@@ -14,7 +14,7 @@ import tijos.runtime.sensor.button.TiButtonEventListener;
  * @author Jason
  *
  */
-class ButtonEventListener implements TiButtonEventListener {
+class ButtonEventListener implements ITiButtonEventListener {
 	private boolean pressed = false;
 	private int pinID;
 	
@@ -71,21 +71,19 @@ public class RangefinderSample {
 		int gpioPort0 = 0;
 		int i2cPort0 = 0;
 		/*
-		 * 定义所使用的gpio pin列表
+		 * 定义所使用的gpio pin 集合
 		 * */
 		int gpioPin3 = 3;
 		int gpioPin4 = 4;
 		int gpioPin5 = 5;
 		int gpioPin6 = 6;
 		int gpioPin7 = 7;
-		
-		int[] gpioPinList = {gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7};
 		/*
 		 * 资源分配， 将i2cPort0分配给TiI2CMaster实例i2c0
 		 * 将gpioPort0分配给TiGPIO实例gpio0
 		 */
 		TiI2CMaster i2c0 = TiI2CMaster.open(i2cPort0);
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPinList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7);
 
 		/*
 		 * 资源绑定 

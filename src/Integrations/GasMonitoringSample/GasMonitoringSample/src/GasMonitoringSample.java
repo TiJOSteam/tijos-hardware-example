@@ -1,14 +1,14 @@
-import tijos.runtime.deviceaccess.TiI2CMaster;
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.transducer.led.TiLED;
-import tijos.runtime.transducer.led.TiOLED_UG2864;
-import tijos.runtime.transducer.relay.TiRelay1CH;
-import tijos.runtime.transducer.buzzer.TiBuzzer;
-import tijos.runtime.sensor.humiture.TiDHT;
-import tijos.runtime.sensor.gas.TiMQ2;
-import tijos.runtime.sensor.gas.TiMQ2EventListener;
-import tijos.runtime.sensor.button.TiButton;
-import tijos.runtime.sensor.button.TiButtonEventListener;
+import tijos.framework.devicecenter.TiI2CMaster;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.transducer.led.TiLED;
+import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.relay.TiRelay1CH;
+import tijos.framework.transducer.buzzer.TiBuzzer;
+import tijos.framework.sensor.humiture.TiDHT;
+import tijos.framework.sensor.gas.TiMQ2;
+import tijos.framework.sensor.gas.ITiMQ2EventListener;
+import tijos.framework.sensor.button.TiButton;
+import tijos.framework.sensor.button.ITiButtonEventListener;
 
 /* 
  * 实现按钮监听接口，当有按钮事件发生时，通过状态设置方法关闭报警铃<br>
@@ -16,7 +16,7 @@ import tijos.runtime.sensor.button.TiButtonEventListener;
  * @author Jason
  *
  */
-class ButtonEventListener implements TiButtonEventListener {
+class ButtonEventListener implements ITiButtonEventListener {
 
 	/**
 	 * 按键按下事件处理
@@ -38,7 +38,7 @@ class ButtonEventListener implements TiButtonEventListener {
  * @author Jason
  *
  */
-class MQ2EventListener implements TiMQ2EventListener {
+class MQ2EventListener implements ITiMQ2EventListener {
 	private boolean alarm = false;
 	private int pinID;
 	
@@ -95,7 +95,7 @@ public class GasMonitoringSample {
 		int gpioPort0 = 0;
 		int i2cPort0 = 0;
 		/*
-		 * 定义所使用的gpio pin列表
+		 * 定义所使用的gpio pin 集合
 		 * */
 		int gpioPin2 = 2;
 		int gpioPin3 = 3;
@@ -103,14 +103,12 @@ public class GasMonitoringSample {
 		int gpioPin5 = 5;
 		int gpioPin6 = 6;
 		int gpioPin7 = 7;
-		
-		int[] pinIDList = {gpioPin2, gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7};
 		/*
 		 * 资源分配， 将i2cPort0分配给TiI2CMaster实例i2c0
 		 * 将gpioPort0分配给TiGPIO实例gpio0
 		 */
 		TiI2CMaster i2c0 = TiI2CMaster.open(i2cPort0);
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin2, gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7);
 
 		/*
 		 * 资源绑定 

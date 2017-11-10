@@ -1,9 +1,9 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.sensor.infrared.TiVS1838BNEC;
-import tijos.runtime.sensor.infrared.TiVS1838BNECEventListener;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.sensor.infrared.TiVS1838BNEC;
+import tijos.framework.sensor.infrared.ITiVS1838BNECEventListener;
 
 /**
- * 1.此类实现了TiVS1838BNECEventListener接收事件监听接口<br>
+ * 1.此类实现了ITiVS1838BNECEventListener接收事件监听接口<br>
  * 在<code>cmdReceived</code>与<code>cmdRepead</code>方法中不要阻塞处理事件太久，<br>
  * 因为TiJOS系统所有事件分发在同一个事件监听线程中，若阻塞<br>
  * 太久会影响其他事件的分发，导致事件响应不及时甚至丢失。<br>
@@ -14,7 +14,7 @@ import tijos.runtime.sensor.infrared.TiVS1838BNECEventListener;
  * @author Andy
  *
  */
-class VS1838BNECEventListener implements TiVS1838BNECEventListener {
+class VS1838BNECEventListener implements ITiVS1838BNECEventListener {
 	/**
 	 * 接收事件处理
 	 */
@@ -55,14 +55,10 @@ public class VS1838BNEC {
 		 */
 		int gpioPin0 = 0;
 		/*
-		 * 定义使用的TiGPIO的pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0};
-		/*
 		 * 资源分配，
-		 * 将gpioPort0与pinIDList分配给TiGPIO的对象gpio0
+		 * 将gpioPort0与gpioPin0分配给TiGPIO的对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 		/*
 		 * 资源绑定，
 		 * 创建TiVS1838BNEC的对象vs1838b并将gpio0和gpioPin0与其绑定

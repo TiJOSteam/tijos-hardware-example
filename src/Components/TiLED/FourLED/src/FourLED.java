@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.transducer.led.TiLED;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.transducer.led.TiLED;
 
 /**
  * 此类实现TiLED灯控制功能演示<br>
@@ -29,14 +29,10 @@ public class FourLED {
 		int gpioPin3 = 3;
 		int gpioPin4 = 4;
 		/*
-		 * 定义使用的TiGPIO Pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0, gpioPin1, gpioPin3, gpioPin4};
-		/*
 		 * 资源分配，
-		 * 将gpioPort与pinIDList分配给TiGPIO对象gpio0
+		 * 将gpioPort与gpioPin0/1/3/4分配给TiGPIO对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0, gpioPin1, gpioPin3, gpioPin4);
 		/*
 		 * 资源绑定，
 		 * 创建TiLED对象red/yellow/blue/green并将gpio?和gpioPin?与其绑定

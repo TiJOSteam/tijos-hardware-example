@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiOWMaster;
-import tijos.runtime.sensor.humiture.TiDS18B20;
+import tijos.framework.devicecenter.TiOWMaster;
+import tijos.framework.sensor.humiture.TiDS18B20;
 
 /**
  * 此类实现单个DS18B20数字温度传感器采集温度的功能演示<br>
@@ -29,14 +29,10 @@ public class DS18B20 {
 		 */
 		int owIo0 = 0;
 		/*
-		 * 定义使用的TiOWMaster io 列表
-		 */		
-		int[] owIoIDList = {owIo0};
-		/*
 		 * 资源分配，
-		 * 将owPort0与owIoIDList分配给TiOWMaster的对象ow0
+		 * 将owPort0与owIo0分配给TiOWMaster的对象ow0
 		 */			
-		TiOWMaster ow0 = TiOWMaster.open(owPort0, owIoIDList);
+		TiOWMaster ow0 = TiOWMaster.open(owPort0, owIo0);
 		/*
 		 * 资源绑定，
 		 * 创建TiDS18B20对象ds18b20并将ow0和owIo0与其绑定

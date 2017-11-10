@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiI2CMaster;
-import tijos.runtime.transducer.led.TiOLED_UG2864;
+import tijos.framework.devicecenter.TiI2CMaster;
+import tijos.framework.transducer.led.TiOLED_UG2864;
 
 /**
  * 此类实现TiOLED_UG2864屏幕功能演示<br>
@@ -56,12 +56,16 @@ public class OLED_UG2864 {
 			err = oled12864.clear();
 			if(!err) 
 				System.out.println("oled clear fail");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
 			/*从第0行0列开始打印字符串*/
 			err = oled12864.print(0, 0, s0);
 			if(!err) 
 				System.out.println("oled print fail");
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 			}	
 			err = oled12864.clear();
@@ -78,7 +82,7 @@ public class OLED_UG2864 {
 			if(!err) 
 				System.out.println("oled output fail");	
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {			
 			}
 			err = oled12864.clear();
@@ -89,11 +93,7 @@ public class OLED_UG2864 {
 			if(!err) 
 				System.out.println("oled turnOff fail");
 			else
-				System.out.println("oled is turned off");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}		
+				System.out.println("oled is turned off");	
 		}
 	}
 }

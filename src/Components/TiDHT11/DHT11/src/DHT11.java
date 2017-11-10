@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.sensor.humiture.TiDHT;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.sensor.humiture.TiDHT;
 
 /**
  * 此类实现DHT11数字温湿度传感器采集温度、湿度的功能演示<br>
@@ -27,14 +27,10 @@ public class DHT11 {
 		 */
 		int gpioPin0 = 0;
 		/*
-		 * 定义使用的TiGPIO的pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0};
-		/*
 		 * 资源分配，
-		 * 将gpioPort0与PinIDList分配给TiGPIO的对象gpio0
+		 * 将gpioPort0与gpioPin0分配给TiGPIO的对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 		/*
 		 * 资源绑定，
 		 * 创建TiDHT的对象dht并将gpio0和gpioPin0与其绑定

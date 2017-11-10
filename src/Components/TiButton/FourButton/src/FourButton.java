@@ -1,9 +1,9 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.sensor.button.TiButton;
-import tijos.runtime.sensor.button.TiButtonEventListener;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.sensor.button.TiButton;
+import tijos.framework.sensor.button.ITiButtonEventListener;
 
 /**
- * 1.此类实现了TiButtonEventListener四按键事件监听接口<br>
+ * 1.此类实现了ITiButtonEventListener四按键事件监听接口<br>
  * 在<code>onPressed</code>与<code>onReleased</code>方法中不要阻塞处理事件太久，<br>
  * 因为TiJOS系统所有事件分发在同一个事件监听线程中，若阻塞<br>
  * 太久会影响其他事件的分发，导致事件响应不及时甚至丢失。<br>
@@ -14,7 +14,7 @@ import tijos.runtime.sensor.button.TiButtonEventListener;
  * @author Andy
  *
  */
-class FourButtonEventListener implements TiButtonEventListener {
+class FourButtonEventListener implements ITiButtonEventListener {
 
 	/**
 	 * 按键按下事件处理
@@ -59,14 +59,10 @@ public class FourButton {
 		int gpioPin3 = 3;
 		int gpioPin4 = 4;
 		/*
-		 * 定义使用的TiGPIO pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0,gpioPin1,gpioPin3,gpioPin4};
-		/*
 		 * 资源分配，
-		 * 将gpioPort0与pinIDList分配给TiGPIO对象gpio0
+		 * 将gpioPort0与gpioPin0/1/3/4分配给TiGPIO对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0, gpioPin1, gpioPin3, gpioPin4);
 		/*
 		 * 资源绑定，
 		 * 创建TiButton对象buttonS1/S2/S3/S4并将gpio0和gpioPin0/1/3/4与其绑定

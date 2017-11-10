@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiGPIO;
-import tijos.runtime.transducer.relay.TiRelay1CH;
+import tijos.framework.devicecenter.TiGPIO;
+import tijos.framework.transducer.relay.TiRelay1CH;
 
 /**
  * 此类实现TiRelay1CH继电器控制功能演示<br>
@@ -26,14 +26,10 @@ public class Relay1CH {
 		 */
 		int gpioPin0 = 0;
 		/*
-		 * 定义使用的TiGPIO Pin 列表
-		 */		
-		int[] pinIDList = {gpioPin0};
-		/*
 		 * 资源分配，
-		 * 将gpioPort与pinIDList分配给TiGPIO对象gpio0
+		 * 将gpioPort与gpioPin0分配给TiGPIO对象gpio0
 		 */			
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, pinIDList);
+		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 		/*
 		 * 资源绑定，
 		 * 创建TiRelay1CH对象relay并将gpioPort和gpioPortPin与其绑定
@@ -47,14 +43,14 @@ public class Relay1CH {
 			relay.turnOn();
 			System.out.println("relay is turned on");
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				
 			}
 			relay.turnOff();
 			System.out.println("relay is turned off");
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				
 			}			

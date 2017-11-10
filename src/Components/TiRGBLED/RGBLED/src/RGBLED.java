@@ -1,5 +1,5 @@
-import tijos.runtime.deviceaccess.TiPWM;
-import tijos.runtime.transducer.led.TiRGBLED;
+import tijos.framework.devicecenter.TiPWM;
+import tijos.framework.transducer.led.TiRGBLED;
 import java.util.Random;
 
 /**
@@ -31,14 +31,10 @@ public class RGBLED {
 		int ch1 = 1;
 		int ch2 = 2;
 		/*
-		 * 定义使用的TiGPIO ch 列表
-		 */		
-		int[] chIDList = {ch0,ch1,ch2};
-		/*
 		 * 资源分配，
-		 * 将gpioPort与chIDList分配给TiGPIO对象pwm0
+		 * 将gpioPort与ch0/1/2分配给TiGPIO对象pwm0
 		 */			
-		TiPWM pwm0 = TiPWM.open(pwmPort0, chIDList);
+		TiPWM pwm0 = TiPWM.open(pwmPort0, ch0,ch1,ch2);
 		/*
 		 * 资源绑定，
 		 * 创建TiRGBLED对象rgbled并将gpioPort和相应的(通道)ch与其对应的颜色绑定
