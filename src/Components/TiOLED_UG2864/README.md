@@ -25,7 +25,7 @@
 
 ### 示意图
 
-![TiOLED_UG2864屏幕控制例程](./Picture/TiOLED_UG2864屏幕控制例程.JPG)
+![TiOLED_UG2864屏幕控制例程](./Picture/TiOLED_UG2864屏幕控制例程.jpg)
 
 ### 注意事项
 
