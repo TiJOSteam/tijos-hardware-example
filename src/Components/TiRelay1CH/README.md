@@ -20,7 +20,7 @@
 
 ### 示意图
 
-![TiRelay1CH继电器控制例程](.\Picture\TiRelay1CH继电器控制例程.jpg)
+![TiRelay1CH继电器控制例程](./Picture/TiRelay1CH继电器控制例程.jpg)
 
 ### 注意事项
 

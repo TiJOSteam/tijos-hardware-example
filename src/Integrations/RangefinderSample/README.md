@@ -64,7 +64,7 @@
 
 ### 示意图
 
-![TiButton 四按键功能例程](.\Picture\TiOS_Rangefinder例程.png)
+![TiButton 四按键功能例程](./Picture/TiOS_Rangefinder例程.png)
 
 ### 注意事项
 

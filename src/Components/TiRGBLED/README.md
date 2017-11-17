@@ -24,7 +24,7 @@
 
 ### 示意图
 
-![TiRGBLED灯控制例程](.\Picture\TiRGBLED灯控制例程.jpg)
+![TiRGBLED灯控制例程](./Picture/TiRGBLED灯控制例程.jpg)
 
 ### 注意事项
 

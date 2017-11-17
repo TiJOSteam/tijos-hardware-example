@@ -26,7 +26,7 @@
 
 ### 示意图
 
-![TiLED四灯控制例程](.\Picture\TiLED四灯控制例程.jpg)
+![TiLED四灯控制例程](./Picture/TiLED四灯控制例程.jpg)
 
 ### 注意事项
 

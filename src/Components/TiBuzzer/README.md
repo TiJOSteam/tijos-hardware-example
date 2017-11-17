@@ -23,7 +23,7 @@
 
 ### 示意图 
 
-![TiBuzzer有源蜂鸣器功能例程](.\Picture\TiBuzzer有源蜂鸣器功能例程.jpg)
+![TiBuzzer有源蜂鸣器功能例程](./Picture/TiBuzzer有源蜂鸣器功能例程.jpg)
 
 ### 注意事项
 
