@@ -32,7 +32,7 @@
 
 ### 示意图
 
-![TiButton四按键功能例程](.\Picture\TiButton四按键功能例程.png)
+![TiButton四按键功能例程](./Picture/TiButton四按键功能例程.png)
 
 ### 注意事项
 

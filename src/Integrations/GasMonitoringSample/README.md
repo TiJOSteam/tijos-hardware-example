@@ -77,7 +77,7 @@
 
 ### 示意图
 
-![TiButton 四按键功能例程](.\Picture\TiOS_GasMonitoringSample.png)
+![TiButton 四按键功能例程](./Picture/TiOS_GasMonitoringSample.png)
 
 ### 注意事项
 

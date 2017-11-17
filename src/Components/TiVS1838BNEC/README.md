@@ -23,7 +23,7 @@
 
 ### 示意图
 
-![TiVS1838BNEC红外遥控接收功能例程](.\Picture\TiVS1838BNEC红外遥控接收功能例程.jpg)
+![TiVS1838BNEC红外遥控接收功能例程](./Picture/TiVS1838BNEC红外遥控接收功能例程.jpg)
 
 ### 注意事项
 
