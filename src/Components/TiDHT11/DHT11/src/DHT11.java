@@ -41,8 +41,7 @@ public class DHT11 {
 		 * 设置传感器模式，本例程默认为DHT11
 		 * 启动测量并获取温度、湿度数据
 		 */
-		dht.setModel11();
-
+		
 		while(true) {
 			int err = dht.measure();
 			if(err < 0) {
