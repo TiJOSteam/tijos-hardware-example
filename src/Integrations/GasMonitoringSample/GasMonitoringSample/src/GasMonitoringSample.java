@@ -5,8 +5,8 @@ import tijos.framework.transducer.led.TiOLED_UG2864;
 import tijos.framework.transducer.relay.TiRelay1CH;
 import tijos.framework.transducer.buzzer.TiBuzzer;
 import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.gas.TiMQ2;
-import tijos.framework.sensor.gas.ITiMQ2EventListener;
+import tijos.framework.sensor.gas.TiMQ;
+import tijos.framework.sensor.gas.ITiMQEventListener;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
 
@@ -38,21 +38,21 @@ class ButtonEventListener implements ITiButtonEventListener {
  * @author Jason
  *
  */
-class MQ2EventListener implements ITiMQ2EventListener {
+class MQ2EventListener implements ITiMQEventListener {
 	private boolean alarm = false;
 	private int pinID;
 	
-	public MQ2EventListener(int ttlPinID) {
-		pinID = ttlPinID;
+	public MQ2EventListener(int signalPinID) {
+		pinID = signalPinID;
 	}
 	
-	public synchronized void OnAlarm(TiMQ2 arg0) {
-		if(arg0.getTTLPinID() == pinID)
+	public synchronized void OnAlarm(TiMQ arg0) {
+		if(arg0.getSignalPinID() == pinID)
 			alarm = true;
 	}
 
-	public synchronized void OnRecovery(TiMQ2 arg0) {
-		if(arg0.getTTLPinID() == pinID)
+	public synchronized void OnRecovery(TiMQ arg0) {
+		if(arg0.getSignalPinID() == pinID)
 			alarm = false;
 	}
 	
@@ -114,7 +114,7 @@ public class GasMonitoringSample {
 		 * 资源绑定 
 		 * 创建TiOLED_UG2864实例oled并将i2c0与其绑定
 		 * 创建TiRelay1CH实例relay并将gpioPinID2与其绑定
-		 * 创建TiMQ2实例led并将gpioPinID3与其绑定
+		 * 创建TiMQ实例led并将gpioPinID3与其绑定
 		 * 创建TiLED实例mq2并将gpioPinID4与其绑定
 		 * 创建TiDHT实例dht11并将gpioPinID5与其绑定
 		 * 创建TiBuzzer实例buzzer并将gpioPinID6与其绑定
@@ -123,7 +123,7 @@ public class GasMonitoringSample {
 		TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
 		TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2, true);
 		TiLED led = new TiLED(gpio0, gpioPin3);
-		TiMQ2 mq2 = new TiMQ2(gpio0, gpioPin4);
+		TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
 		TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
 		TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6, false);
 		TiButton button = new TiButton(gpio0, gpioPin7, false);

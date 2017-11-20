@@ -1,10 +1,10 @@
 import tijos.framework.devicecenter.TiADC;
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.sensor.gas.TiMQ2;
-import tijos.framework.sensor.gas.ITiMQ2EventListener;
+import tijos.framework.sensor.gas.TiMQ;
+import tijos.framework.sensor.gas.ITiMQEventListener;
 
 /**
- * 1.此类实现了ITiMQ2EventListener可燃气体浓度报警事件监听接口<br>
+ * 1.此类实现了ITiMQEventListener可燃气体浓度报警事件监听接口<br>
  * 在<code>OnAlarm</code>与<code>OnRecovery</code>方法中不要阻塞处理事件太久，<br>
  * 本例程仅作为示例使用，实际使用时可根据采集到的电压值换算成当前可燃气体的浓度，根据不同环境和要求，该换算方式也不同，用户可根据实际情况自行处理。<br>
  * 可燃气体的浓度越大，则<code>getAnalogVoltage</code>方法获取到的电压值越高，最高为5V<br>
@@ -17,16 +17,16 @@ import tijos.framework.sensor.gas.ITiMQ2EventListener;
  * @author Jason
  *
  */
-class MQ2EventListener implements ITiMQ2EventListener {
+class MQ2EventListener implements ITiMQEventListener {
 
 	/*传感器报警事件处理*/
-	public void OnAlarm(TiMQ2 mq2){
+	public void OnAlarm(TiMQ mq2){
 		System.out.println("Warning! Combustible gas concentration is high");
 		System.out.println("MQ2 voltage = "+mq2.getAnalogVoltage() + " V, time(us):"+mq2.getEventTime());
 	}
 	
 	/*传感器恢复事件处理*/
-	public void OnRecovery(TiMQ2 mq2){
+	public void OnRecovery(TiMQ mq2){
 		System.out.println("The MQ2 has been Recovered, time(us):"+mq2.getEventTime());
 	}
 }
@@ -67,11 +67,11 @@ public class MQ2 {
 		TiADC adc0 = TiADC.open(adcPort0);
 		/*
 		 * 资源绑定，
-		 * 创建TiMQ2对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定
+		 * 创建TiMQ对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定
 		 * Pin0<---->D0
 		 * ADC <---->A0
 		 */	
-		TiMQ2 mq2 = new TiMQ2(gpio0, gpioPin0, adc0);
+		TiMQ mq2 = new TiMQ(gpio0, gpioPin0, adc0);
 		/*
 		 * 资源使用，
 		 * 创建事件监听对象并设置事件监听
