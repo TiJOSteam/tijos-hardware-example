@@ -1,21 +1,3 @@
-# tijos-hardware-example
-TiJOS examples for sensor and peripheral, it demonstrates how to access the hardware resources of MCU.
-
-
-# More Resources
-
-| Name                                     | Url                                      |
-| ---------------------------------------- | ---------------------------------------- |
-| TiJOS Web Site                           | <http://www.tijos.net>                   |
-| TiJOS Community                          | <http://bbs.tijos.net>                   |
-| TiJOS Introduction                       | <http://dev.tijos.net/overview>          |
-| TiJOS Application Development Guide      | <http://dev.tijos.net/manual>            |
-| TiJOS Development Enviornment Setup Guide | <http://dev.tijos.net/setup>             |
-| TiJOS JDK API Document                   | <http://dev.tijos.net/javadoc>           |
-| TiJOS JDK Software Examples              | <https://github.com/TiJOSTeam/tijos-software-example> |
-| TiJOS Hardware Access Examples           | <https://github.com/TiJOSTeam/tijos-hardware-example> |
-| TiKit-T600-ESP8266A Development Kit Manual | <http://dev.tijos.net/tikit/tikit-t600-esp8266a/> |
-|                                          |                                          |
 
 # TiJOS 外设操作相关例程说明
 
@@ -66,4 +48,27 @@ TiJOS examples for sensor and peripheral, it demonstrates how to access the hard
 | 钛极OS(TiJOS) 外设操作例程           | <https://github.com/TiJOSTeam/tijos-hardware-example> |      |
 | 钛极OS(TiJOS) JDK API文档        | <http://dev.tijos.net/javadoc>           |      |
 | TiKit-T600-ESP8266A 开发套件用户手册 | <http://dev.tijos.net/tikit/tikit-t600-esp8266a/> |      |
+
+
+
+# tijos-hardware-example
+
+TiJOS examples for sensor and peripheral, it demonstrates how to access the hardware resources of MCU.
+
+
+
+# More Resources
+
+| Name                                     | Url                                      |
+| ---------------------------------------- | ---------------------------------------- |
+| TiJOS Web Site                           | <http://www.tijos.net>                   |
+| TiJOS Community                          | <http://bbs.tijos.net>                   |
+| TiJOS Introduction                       | <http://dev.tijos.net/overview>          |
+| TiJOS Application Development Guide      | <http://dev.tijos.net/manual>            |
+| TiJOS Development Enviornment Setup Guide | <http://dev.tijos.net/setup>             |
+| TiJOS JDK API Document                   | <http://dev.tijos.net/javadoc>           |
+| TiJOS JDK Software Examples              | <https://github.com/TiJOSTeam/tijos-software-example> |
+| TiJOS Hardware Access Examples           | <https://github.com/TiJOSTeam/tijos-hardware-example> |
+| TiKit-T600-ESP8266A Development Kit Manual | <http://dev.tijos.net/tikit/tikit-t600-esp8266a/> |
+|                                          |                                          |
 
