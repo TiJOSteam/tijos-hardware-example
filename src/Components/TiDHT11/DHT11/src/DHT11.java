@@ -54,7 +54,7 @@ public class DHT11 {
 				System.out.println("Humidity = "+humidity+" %");
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);//DHT11官方资料要求采集间隔至少2秒
 			} catch (InterruptedException e) {
 			}
 		}
