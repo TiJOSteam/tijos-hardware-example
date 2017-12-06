@@ -33,7 +33,7 @@ class VS1838BNECEventListener implements ITiVS1838BNECEventListener {
 /**
  * 此类实现单个TiVS1838BNEC的事件功能演示，TiJOS中必须使用事件方式处理接收动作<br>
  * TiVS1838BNEC事件的使用分为三步：<br>
- * 1.“资源分配”，使用tijos.runtime.deviceaccess包中TiGPIO类<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
+ * 1.“资源分配”，使用tijos.framework.devicecenter包中TiGPIO类<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
  * 2.“资源绑定”，新创建TiVS1838BNEC对象，将其与1.中分配的GPIO对象以及指定pin绑定。<br>
  * 3.“资源使用”，向TiVS1838BNEC对象中设置事件监听对象，事件监听类需要继承TiVS1838BNECEventListener接口，根据发生的事件类型处理事件逻辑。<br>
  * <p>

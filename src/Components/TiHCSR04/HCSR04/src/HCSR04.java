@@ -4,9 +4,9 @@ import tijos.framework.sensor.distance.TiHCSR04;
 /**
  * 此类实现TiHCSR04超声波测距传感器测量距离的功能演示<br>
  * TiHCSR04测量距离分为三步：<br>
- * 1.“资源分配”：使用tijos.runtime.deviceaccess.TiGPIO包中TiGPIO类的<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
+ * 1.“资源分配”：使用tijos.framework.devicecenter.TiGPIO包中TiGPIO类的<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
  * 2.“资源绑定”：新创建TiHCSR04对象，将其与1.中分配的GPIO对象以及指定pin绑定。<br>
- * 3.“资源使用”：使用tijos.runtime.sensor.humiture.TiHCSR04类中的<code>setSpeed<code>方法（默认为340m/s）设置声波速度，<br>
+ * 3.“资源使用”：使用tijos.framework.sensor.humiture.TiHCSR04类中的<code>setSpeed<code>方法（默认为340m/s）设置声波速度，<br>
  * 然后再循环调用该类中的<code>measure<code>方法进行测量，并调用方法<code>getDistance<code>获取测量到的距离值<br>
  * <p>
  * @author Jason

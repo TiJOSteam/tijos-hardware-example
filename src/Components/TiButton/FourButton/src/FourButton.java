@@ -34,7 +34,7 @@ class FourButtonEventListener implements ITiButtonEventListener {
 /**
  * 此类实现四个TiButton的事件功能演示，TiJOS中建议使用事件方式处理按键动作<br>
  * TiButton事件的使用分为三步：<br>
- * 1.“资源分配”，使用tijos.runtime.deviceaccess包中TiGPIO类<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
+ * 1.“资源分配”，使用tijos.framework.devicecenter包中TiGPIO类<code>open</code>方法分配GPIO对象（注：全局只能分配一次）。<br>
  * 2.“资源绑定”，新创建TiButton对象，将其与1.中分配的GPIO对象以及指定pin绑定。<br>
  * 3.“资源使用”，向TiButton对象中设置事件监听对象，事件监听类需要继承TiButtonEventListener接口，根据发生的事件类型处理事件逻辑。<br>
  * <p>

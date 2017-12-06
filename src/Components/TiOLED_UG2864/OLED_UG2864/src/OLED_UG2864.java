@@ -4,9 +4,9 @@ import tijos.framework.transducer.led.TiOLED_UG2864;
 /**
  * 此类实现TiOLED_UG2864屏幕功能演示<br>
  * TiOLED_UG2864的使用分为三步：<br>
- * 1.“资源分配”：使用tijos.runtime.deviceaccess.TiI2CMaster包中TiI2CMaster类的<code>open</code>方法分配I2C对象（注：全局只能分配一次）。<br>
+ * 1.“资源分配”：使用tijos.framework.devicecenter.TiI2CMaster包中TiI2CMaster类的<code>open</code>方法分配I2C对象（注：全局只能分配一次）。<br>
  * 2.“资源绑定”：新创建TiOLED_UG2864对象，将其与1.中分配的I2C对象绑定,并传入设备（屏幕）的地址。<br>
- * 3.“资源使用”：使用tijos.runtime.transducer.transducer.led.TiOLED_UG2864类中的相应方法操作屏幕，详情见例程中的操作步骤。<br>
+ * 3.“资源使用”：使用tijos.framework.transducer.transducer.led.TiOLED_UG2864类中的相应方法操作屏幕，详情见例程中的操作步骤。<br>
  * <p>
  * @author Jason
  *

@@ -4,9 +4,9 @@ import tijos.framework.transducer.relay.TiRelay1CH;
 /**
  * 此类实现TiRelay1CH继电器控制功能演示<br>
  * TiRelay1CH控制分为三步：<br>
- * 1.“资源分配”：使用tijos.runtime.deviceaccess.TiGPIO包中TiGPIO类的<code>open</code>方法分配GPIO对象。（注：全局只能分配一次）。<br>
+ * 1.“资源分配”：使用tijos.framework.devicecenter.TiGPIO包中TiGPIO类的<code>open</code>方法分配GPIO对象。（注：全局只能分配一次）。<br>
  * 2.“资源绑定”：新创建TiRelay1CH对象，将其与1.中分配的GPIO对象以及指定pin绑定,同时选择继电器的驱动方式。<br>
- * 3.“资源使用”：使用tijos.runtime.transducer.transducer.relay.TiRelay1CH类中的<code>turnOn<code>以及<code>turnOff<code>控制继电器的通断。<br>
+ * 3.“资源使用”：使用tijos.framework.transducer.transducer.relay.TiRelay1CH类中的<code>turnOn<code>以及<code>turnOff<code>控制继电器的通断。<br>
  * <p>
  * @author Jason
  *

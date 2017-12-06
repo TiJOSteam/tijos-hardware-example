@@ -5,9 +5,9 @@ import java.util.Random;
 /**
  * 此类实现TiRGBLED灯控制功能演示<br>
  * TiRGBLED控制分为三步：<br>
- * 1.“资源分配”：使用tijos.runtime.deviceaccess.TiPWM包中TiPWM类的<code>open</code>方法分配PWM对象（注：全局只能分配一次）。<br>
+ * 1.“资源分配”：使用tijos.framework.devicecenter.TiPWM包中TiPWM类的<code>open</code>方法分配PWM对象（注：全局只能分配一次）。<br>
  * 2.“资源绑定”：新创建TiRGBLED对象，将其与1.中分配的PWM对象以及指定通道（ch）绑定，同时设定灯的控制方式（默认为输出高电平点亮）。<br>
- * 3.“资源使用”：使用tijos.runtime.transducer.led.TiRGBLED类中的<code>setPeriod<code>设置PWM周期，<br>
+ * 3.“资源使用”：使用tijos.framework.transducer.led.TiRGBLED类中的<code>setPeriod<code>设置PWM周期，<br>
  * 然后通过调用方法<code>setRedBrightness<code>、<code>setGreenBrightness<code>、<code>setBlueBrightness<code><br>
  * 调整三个基色（红色、蓝色、绿色）的亮度，最后调用方法<code>updateBrightness<code>将参数统一设置后生效，以达到合成不同颜色光的目的。<br>
  * <p>

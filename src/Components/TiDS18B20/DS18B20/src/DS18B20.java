@@ -4,11 +4,11 @@ import tijos.framework.sensor.humiture.TiDS18B20;
 /**
  * 此类实现单个DS18B20数字温度传感器采集温度的功能演示<br>
  * TiDS18B20采集温度数据分为三步：<br>
- * 1.“资源分配”：使用tijos.runtime.deviceaccess.TiOWMaster包中TiOWMaster类的<code>open</code>方法分配OW（单总线onewire）对象。<br>
+ * 1.“资源分配”：使用tijos.framework.devicecenter.TiOWMaster包中TiOWMaster类的<code>open</code>方法分配OW（单总线onewire）对象。<br>
  * 2.“资源绑定”：新创建TiDS18B20对象，将其与1.中分配的OW对象以及指定io绑定。<br>
- * 3.“资源使用”：当同一根总线上只有一个DS18B20传感器时，调用tijos.runtime.sensor.humiture.TiDS18B20类中的<code>selectSingle</code>方法选择单个传感器,
+ * 3.“资源使用”：当同一根总线上只有一个DS18B20传感器时，调用tijos.framework.sensor.humiture.TiDS18B20类中的<code>selectSingle</code>方法选择单个传感器,
  * 然后循环调用该类中的<code>measure</code>方法开始测量，并调用<code>getTemperature</code>方法获取温度；<br>
- * 当同一根总线上上挂有多个DIS18B20传感器时，需要先调用tijos.runtime.sensor.humiture.TiDS18B20类中的<code>enumeration</code>方法枚举总线上的设备,<br>
+ * 当同一根总线上上挂有多个DIS18B20传感器时，需要先调用tijos.framework.sensor.humiture.TiDS18B20类中的<code>enumeration</code>方法枚举总线上的设备,<br>
  * 然后再调用该类中的<code>select</code>方法选择要操作的传感器，最后再循环调用<code>measure</code>方法并调用<code>getTemperature</code>方法获取对应温度传感器的温度。
  * <p>
  * @author Jason
