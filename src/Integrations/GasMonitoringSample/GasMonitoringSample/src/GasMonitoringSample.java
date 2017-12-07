@@ -39,25 +39,19 @@ class ButtonEventListener implements ITiButtonEventListener {
  *
  */
 class MQ2EventListener implements ITiMQEventListener {
-	private boolean alarm = false;
-	private int pinID;
 	
-	public MQ2EventListener(int signalPinID) {
-		pinID = signalPinID;
-	}
+	private TiMQ _mq2 = null;
+	private boolean _alarm = false;
 	
-	public synchronized void OnAlarm(TiMQ arg0) {
-		if(arg0.getSignalPinID() == pinID)
-			alarm = true;
-	}
-
-	public synchronized void OnRecovery(TiMQ arg0) {
-		if(arg0.getSignalPinID() == pinID)
-			alarm = false;
+	public void onThresholdNotify(TiMQ arg0) {
+		this._mq2 = arg0;
+		synchronized(this) {
+			this._alarm = this._mq2.isGreaterThanThreshold();
+		}
 	}
 	
 	public synchronized boolean isAlarm() {
-		return alarm;
+		return this._alarm;
 	}
 }
 
@@ -179,7 +173,7 @@ public class GasMonitoringSample {
 		ButtonEventListener lcButton = new ButtonEventListener();
 		button.setEventListener(lcButton);
 		
-		MQ2EventListener lcMQ2 = new MQ2EventListener(gpioPin4);
+		MQ2EventListener lcMQ2 = new MQ2EventListener();
 		mq2.setEventListener(lcMQ2);
 		
 		/*
