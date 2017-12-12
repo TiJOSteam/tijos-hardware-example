@@ -1,5 +1,8 @@
 import tijos.framework.devicecenter.TiPWM;
 import tijos.framework.transducer.led.TiRGBLED;
+import tijos.util.Delay;
+
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -11,67 +14,69 @@ import java.util.Random;
  * 然后通过调用方法<code>setRedBrightness<code>、<code>setGreenBrightness<code>、<code>setBlueBrightness<code><br>
  * 调整三个基色（红色、蓝色、绿色）的亮度，最后调用方法<code>updateBrightness<code>将参数统一设置后生效，以达到合成不同颜色光的目的。<br>
  * <p>
+ * 
  * @author Jason
  *
  */
 public class RGBLED {
 	/**
 	 * 程序入口，由TiJOS调用
-	 * @param args 入口参数， TiJOS中一直等于null
+	 * 
+	 * @param args
+	 *            入口参数， TiJOS中一直等于null
 	 */
 	public static void main(String[] args) {
-		/*
-		 * 定义使用的TiPWM port
-		 */
-		int pwmPort0 = 0;
-		/*
-		 * 定义使用的TiPWM ch（通道）
-		 */
-		int ch0 = 0;
-		int ch1 = 1;
-		int ch2 = 2;
-		/*
-		 * 资源分配，
-		 * 将gpioPort与ch0/1/2分配给TiGPIO对象pwm0
-		 */			
-		TiPWM pwm0 = TiPWM.open(pwmPort0, ch0,ch1,ch2);
-		/*
-		 * 资源绑定，
-		 * 创建TiRGBLED对象rgbled并将gpioPort和相应的(通道)ch与其对应的颜色绑定
-		 * red-----ch0
-		 * green---ch1
-		 * blue----ch2
-		 */	
-		TiRGBLED rgbled = new TiRGBLED(pwm0, ch0, ch1, ch2);
-		/*
-		 * 资源使用，
-		 * 设置pwm输出的周期,默认为1000hz
-		 * 控制三种基色的亮度(各个颜色的亮度值变化范围为0-255)，达到合成不同颜色光的效果
-		 * 本例程采用取0-255随机数的方式随机设置各个基色的亮度，达到无序变色的效果
-		 */		
-		Random random = new Random();
-		rgbled.setPeriod(1000);
-		while(true) {
-			int r = 0,g=0,b=0;
-			int max=255;
-		    int min=0; 
-		    r = random.nextInt(max)%(max-min+1) + min;
-		    g = random.nextInt(max)%(max-min+1) + min;
-		    b = random.nextInt(max)%(max-min+1) + min;
-		    
-		    rgbled.setRedBrightness(r);
-		    rgbled.setGreenBrightness(g);
-		    rgbled.setBlueBrightness(b);
-		    //亮度更新
-		    rgbled.updateBrightness();
-		    
-			System.out.println("redlevel="+r);
-			System.out.println("greenlevel="+g);
-			System.out.println("bluelevel="+b);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {	
+		try {
+			/*
+			 * 定义使用的TiPWM port
+			 */
+			int pwmPort0 = 0;
+			/*
+			 * 定义使用的TiPWM ch（通道）
+			 */
+			int ch0 = 0;
+			int ch1 = 1;
+			int ch2 = 2;
+			/*
+			 * 资源分配， 将gpioPort与ch0/1/2分配给TiGPIO对象pwm0
+			 */
+			TiPWM pwm0 = TiPWM.open(pwmPort0, ch0, ch1, ch2);
+			/*
+			 * 资源绑定， 创建TiRGBLED对象rgbled并将gpioPort和相应的(通道)ch与其对应的颜色绑定 red-----ch0
+			 * green---ch1 blue----ch2
+			 */
+			TiRGBLED rgbled = new TiRGBLED(pwm0, ch0, ch1, ch2);
+			/*
+			 * 资源使用， 设置pwm输出的周期,默认为1000hz
+			 * 控制三种基色的亮度(各个颜色的亮度值变化范围为0-255)，达到合成不同颜色光的效果
+			 * 本例程采用取0-255随机数的方式随机设置各个基色的亮度，达到无序变色的效果
+			 */
+			Random random = new Random();
+			rgbled.setPeriod(1000);
+			while (true) {
+				int r = 0, g = 0, b = 0;
+				int max = 255;
+				int min = 0;
+				r = random.nextInt(max) % (max - min + 1) + min;
+				g = random.nextInt(max) % (max - min + 1) + min;
+				b = random.nextInt(max) % (max - min + 1) + min;
+
+				rgbled.setRedBrightness(r);
+				rgbled.setGreenBrightness(g);
+				rgbled.setBlueBrightness(b);
+				// 亮度更新
+				rgbled.updateBrightness();
+
+				System.out.println("redlevel=" + r);
+				System.out.println("greenlevel=" + g);
+				System.out.println("bluelevel=" + b);
+				
+				Delay.msDelay(100);
 			}
-		}		
+		} catch (IOException ie) {
+
+			ie.printStackTrace();
+		}
+
 	}
 }

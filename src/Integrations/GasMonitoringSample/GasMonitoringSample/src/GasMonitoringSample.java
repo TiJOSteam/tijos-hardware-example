@@ -1,4 +1,7 @@
 import tijos.framework.devicecenter.TiI2CMaster;
+
+import java.io.IOException;
+
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.led.TiLED;
 import tijos.framework.transducer.led.TiOLED_UG2864;
@@ -22,34 +25,39 @@ class ButtonEventListener implements ITiButtonEventListener {
 	 * 按键按下事件处理
 	 */
 	public void onPressed(TiButton arg0) {
-		GasMonitoringSample.stopAlarm();		
+		GasMonitoringSample.stopAlarm();
 	}
 
 	/**
 	 * 按键释放事件处理
 	 */
-	public void onReleased(TiButton arg0) {			
-	}	
+	public void onReleased(TiButton arg0) {
+	}
 }
 
-/* 
- * 实现MQ2监听接口<br>
- * <p>
+/*
+ * 实现MQ2监听接口<br> <p>
+ * 
  * @author Jason
  *
  */
 class MQ2EventListener implements ITiMQEventListener {
-	
+
 	private TiMQ _mq2 = null;
 	private boolean _alarm = false;
-	
+
 	public void onThresholdNotify(TiMQ arg0) {
 		this._mq2 = arg0;
-		synchronized(this) {
-			this._alarm = this._mq2.isGreaterThanThreshold();
+		synchronized (this) {
+			try {
+				this._alarm = this._mq2.isGreaterThanThreshold();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	public synchronized boolean isAlarm() {
 		return this._alarm;
 	}
@@ -74,156 +82,150 @@ public class GasMonitoringSample {
 	/*
 	 * 程序入口，由TiJOS调用
 	 * 
-	 * @param args
-	 *            入口参数， TiJOS中一直等于null
+	 * @param args 入口参数， TiJOS中一直等于null
 	 */
 	public static boolean isCanceled = false;
-	
-	public static void stopAlarm(){
+
+	public static void stopAlarm() {
 		isCanceled = true;
 	}
+
 	public static void main(String[] args) {
-		/*
-		 * 定义使用的TiI2CMaster port和TiGPIO port
-		 */
-		int gpioPort0 = 0;
-		int i2cPort0 = 0;
-		/*
-		 * 定义所使用的gpio pin 集合
-		 * */
-		int gpioPin2 = 2;
-		int gpioPin3 = 3;
-		int gpioPin4 = 4;
-		int gpioPin5 = 5;
-		int gpioPin6 = 6;
-		int gpioPin7 = 7;
-		/*
-		 * 资源分配， 将i2cPort0分配给TiI2CMaster实例i2c0
-		 * 将gpioPort0分配给TiGPIO实例gpio0
-		 */
-		TiI2CMaster i2c0 = TiI2CMaster.open(i2cPort0);
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin2, gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7);
-
-		/*
-		 * 资源绑定 
-		 * 创建TiOLED_UG2864实例oled并将i2c0与其绑定
-		 * 创建TiRelay1CH实例relay并将gpioPinID2与其绑定
-		 * 创建TiMQ实例led并将gpioPinID3与其绑定
-		 * 创建TiLED实例mq2并将gpioPinID4与其绑定
-		 * 创建TiDHT实例dht11并将gpioPinID5与其绑定
-		 * 创建TiBuzzer实例buzzer并将gpioPinID6与其绑定
-		 * 创建TiButton实例button并将gpioPinID7与其绑定
-		 */
-		TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
-		TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2, true);
-		TiLED led = new TiLED(gpio0, gpioPin3);
-		TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
-		TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
-		TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6, false);
-		TiButton button = new TiButton(gpio0, gpioPin7, false);
-		
-		/*
-		 * 资源使用
-		 * 关闭蜂鸣器
-		 * 定义所需要的变量以及需要显示的菜单字符；
-		 */
-		
-		buzzer.turnOff();
-		
-		String sWelcome = "Welcome!";
-		String sModel = "Ti-GasMonitoring";
-		String sTemptrue = "TEMP:";
-		String sHumidity = "HUMI:";
-		String sMode = "MODE:       ";
-		String sPrepare = "WAITING...";
-
-		/*
-		 * TiOLED_UG2864屏幕初始操作：
-		 * 1.开启屏幕
-		 * 2.整屏清除
-		 * 3.显示欢迎界面以及仪器型号
-		 * */
-		oled.turnOn();
-		oled.clear();
-		oled.print(1, 4, sWelcome);
-		oled.print(2, 0, sModel);
 		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-		}
-		/*
-		 * 清屏后显示菜单字符，包括温度，湿度，工作模式以及报警提示
-		 * */
-		oled.clear();
-		oled.print(0, 0, sTemptrue);
-		oled.print(1, 0, sHumidity);
-		oled.print(2, 0, sMode);
-		oled.print(3, 3, sPrepare);
-		/*
-		 * 延时5秒，等待MQ2传感器加热、初始化
-		 * */
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-		}
-		/*
-		 *  创建事件监听实例并设置事件监听
-		 * 在事件监听中设置按键消息
-		 * */
-		ButtonEventListener lcButton = new ButtonEventListener();
-		button.setEventListener(lcButton);
-		
-		MQ2EventListener lcMQ2 = new MQ2EventListener();
-		mq2.setEventListener(lcMQ2);
-		
-		/*
-		 * 最后打开继电器，模拟给电器供电
-		 * */
-		relay.turnOn();
-		
-		while (true) {
 			/*
-			 * 测量温湿度，并显示
-			 * */
-			dht11.measure();
-			String temp = String.valueOf(dht11.getTemperature());
-			String humi = String.valueOf(dht11.getHumidity());
+			 * 定义使用的TiI2CMaster port和TiGPIO port
+			 */
+			int gpioPort0 = 0;
+			int i2cPort0 = 0;
+			/*
+			 * 定义所使用的gpio pin 集合
+			 */
+			int gpioPin2 = 2;
+			int gpioPin3 = 3;
+			int gpioPin4 = 4;
+			int gpioPin5 = 5;
+			int gpioPin6 = 6;
+			int gpioPin7 = 7;
+			/*
+			 * 资源分配， 将i2cPort0分配给TiI2CMaster实例i2c0 将gpioPort0分配给TiGPIO实例gpio0
+			 */
+			TiI2CMaster i2c0 = TiI2CMaster.open(i2cPort0);
+			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin2, gpioPin3, gpioPin4, gpioPin5, gpioPin6, gpioPin7);
 
-			oled.print(0, 5, temp + "C ");
-			oled.print(1, 5, humi + "% ");
 			/*
-			 * 发生可燃气体浓度高报警事件，并进行处理
-			 * */
-			if(lcMQ2.isAlarm()){
-				if(isCanceled){
-					/*
-					 * 如果按钮被按下，则关闭蜂鸣器的报警，报警灯依旧闪烁，屏幕显示报警信息
-					 * */
+			 * 资源绑定 创建TiOLED_UG2864实例oled并将i2c0与其绑定
+			 * 创建TiRelay1CH实例relay并将gpioPinID2与其绑定 创建TiMQ实例led并将gpioPinID3与其绑定
+			 * 创建TiLED实例mq2并将gpioPinID4与其绑定 创建TiDHT实例dht11并将gpioPinID5与其绑定
+			 * 创建TiBuzzer实例buzzer并将gpioPinID6与其绑定
+			 * 创建TiButton实例button并将gpioPinID7与其绑定
+			 */
+			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
+			TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2, true);
+			TiLED led = new TiLED(gpio0, gpioPin3);
+			TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
+			TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
+			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6, false);
+			TiButton button = new TiButton(gpio0, gpioPin7, false);
+
+			/*
+			 * 资源使用 关闭蜂鸣器 定义所需要的变量以及需要显示的菜单字符；
+			 */
+
+			buzzer.turnOff();
+
+			String sWelcome = "Welcome!";
+			String sModel = "Ti-GasMonitoring";
+			String sTemptrue = "TEMP:";
+			String sHumidity = "HUMI:";
+			String sMode = "MODE:       ";
+			String sPrepare = "WAITING...";
+
+			/*
+			 * TiOLED_UG2864屏幕初始操作： 1.开启屏幕 2.整屏清除 3.显示欢迎界面以及仪器型号
+			 */
+			oled.turnOn();
+			oled.clear();
+			oled.print(1, 4, sWelcome);
+			oled.print(2, 0, sModel);
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+			}
+			/*
+			 * 清屏后显示菜单字符，包括温度，湿度，工作模式以及报警提示
+			 */
+			oled.clear();
+			oled.print(0, 0, sTemptrue);
+			oled.print(1, 0, sHumidity);
+			oled.print(2, 0, sMode);
+			oled.print(3, 3, sPrepare);
+			/*
+			 * 延时5秒，等待MQ2传感器加热、初始化
+			 */
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+			}
+			/*
+			 * 创建事件监听实例并设置事件监听 在事件监听中设置按键消息
+			 */
+			ButtonEventListener lcButton = new ButtonEventListener();
+			button.setEventListener(lcButton);
+
+			MQ2EventListener lcMQ2 = new MQ2EventListener();
+			mq2.setEventListener(lcMQ2);
+
+			/*
+			 * 最后打开继电器，模拟给电器供电
+			 */
+			relay.turnOn();
+
+			while (true) {
+				/*
+				 * 测量温湿度，并显示
+				 */
+				dht11.measure();
+				String temp = String.valueOf(dht11.getTemperature());
+				String humi = String.valueOf(dht11.getHumidity());
+
+				oled.print(0, 5, temp + "C ");
+				oled.print(1, 5, humi + "% ");
+				/*
+				 * 发生可燃气体浓度高报警事件，并进行处理
+				 */
+				if (lcMQ2.isAlarm()) {
+					if (isCanceled) {
+						/*
+						 * 如果按钮被按下，则关闭蜂鸣器的报警，报警灯依旧闪烁，屏幕显示报警信息
+						 */
+						buzzer.turnOff();
+						led.turnOn();
+					} else {
+						buzzer.turnOn();
+						led.turnOn();
+					}
+					relay.turnOff();
+					oled.print(2, 5, "Alarm");
+					oled.print(3, 3, "WARNING!!!  ");
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
 					buzzer.turnOff();
-					led.turnOn();	
+					led.turnOff();
+				} else {
+					isCanceled = false;
+					buzzer.turnOff();
+					relay.turnOn();
+					led.turnOff();
+					oled.print(2, 5, "Safe ");
+					oled.print(3, 3, "WORKING ^_^  ");
 				}
-				else{
-					buzzer.turnOn();
-					led.turnOn();
-				}
-				relay.turnOff();
-				oled.print(2, 5, "Alarm");
-				oled.print(3, 3, "WARNING!!!  ");
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-				}
-				buzzer.turnOff();
-				led.turnOff();
 			}
-			else{
-				isCanceled = false;
-				buzzer.turnOff();
-				relay.turnOn();
-				led.turnOff();
-				oled.print(2, 5, "Safe ");
-				oled.print(3, 3, "WORKING ^_^  ");
-			}
+
+		} catch (IOException ie) {
+
+			ie.printStackTrace();
 		}
 	}
 }

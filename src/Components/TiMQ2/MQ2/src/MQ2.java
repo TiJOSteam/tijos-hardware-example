@@ -1,6 +1,9 @@
+import java.io.IOException;
+
 import tijos.framework.devicecenter.TiADC;
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.gas.TiMQ;
+import tijos.util.Delay;
 import tijos.framework.sensor.gas.ITiMQEventListener;
 
 /**
@@ -15,15 +18,21 @@ import tijos.framework.sensor.gas.ITiMQEventListener;
  * 2.如果实际应用中，需要较长时间来处理某事件，建议在新的线程中<br>
  * 处理。<br>
  * <p>
+ * 
  * @author Jason
  *
  */
 class MQ2EventListener implements ITiMQEventListener {
-	/*阈值检测值变化的通知*/
+	/* 阈值检测值变化的通知 */
 	public void onThresholdNotify(TiMQ arg0) {
-		System.out.println("Notification of change of threshold value detection value, time(us):"+arg0.getEventTime());
-		System.out.println("Greater than threshold:"+arg0.isGreaterThanThreshold());
-		System.out.println("Analog voltage(V):"+arg0.getAnalogOutput());
+		try {
+			System.out.println(
+					"Notification of change of threshold value detection value, time(us):" + arg0.getEventTime());
+			System.out.println("Greater than threshold:" + arg0.isGreaterThanThreshold());
+			System.out.println("Analog voltage(V):" + arg0.getAnalogOutput());
+		} catch (IOException ie) {
+			ie.printStackTrace();
+		}
 	}
 }
 
@@ -35,53 +44,51 @@ class MQ2EventListener implements ITiMQEventListener {
  * 2.“资源绑定”，新创建TiMQ2对象，将其与1.中分配的GPIO对象以及ADC对象进行绑定。<br>
  * 3.“资源使用”，向TiMQ2对象中设置事件监听对象，事件监听类需要继承TiMQ2EventListener接口，根据发生的事件类型处理事件逻辑。<br>
  * <p>
+ * 
  * @author Jason
  *
  */
 public class MQ2 {
 	/**
 	 * 程序入口，由TiJOS调用
-	 * @param args 入口参数， TiJOS中一直等于null
+	 * 
+	 * @param args
+	 *            入口参数， TiJOS中一直等于null
 	 */
 	public static void main(String[] args) {
-		/*
-		 * 定义使用的TiGPIO port
-		 * 定义使用的TiADC port
-		 */
-		int adcPort0 = 0;
-		int gpioPort0 = 0;
-		/*
-		 * 定义所使用的gpioPin
-		 * */
-		int gpioPin0 = 0;
-		/*
-		 * 资源分配，
-		 * 将gpioPort与gpioPin0分配给TiGPIO对象gpio0
-		 * 将adcPort0分配给TiADC对象adc0
-		 */
-		TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
-		TiADC adc0 = TiADC.open(adcPort0);
-		/*
-		 * 资源绑定，
-		 * 创建TiMQ对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定
-		 * Pin0<---->D0
-		 * ADC <---->A0
-		 */	
-		TiMQ mq2 = new TiMQ(gpio0, gpioPin0, adc0);
-		/*
-		 * 资源使用，
-		 * 创建事件监听对象并设置事件监听
-		 * 在事件监听中处理按键事件逻辑
-		 * TiMQ2 使用的是硬件定点报警功能，即报警最低电压通过可变电阻设置，报警后可通过TiADC获取报警电压值。
-		 */			
-		MQ2EventListener lc = new MQ2EventListener();
-		mq2.setEventListener(lc);
-	
-		while(true) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}		
-		}		
+		try {
+			/*
+			 * 定义使用的TiGPIO port 定义使用的TiADC port
+			 */
+			int adcPort0 = 0;
+			int gpioPort0 = 0;
+			/*
+			 * 定义所使用的gpioPin
+			 */
+			int gpioPin0 = 0;
+			/*
+			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
+			 */
+			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
+			TiADC adc0 = TiADC.open(adcPort0);
+			/*
+			 * 资源绑定， 创建TiMQ对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定 Pin0<---->D0
+			 * ADC <---->A0
+			 */
+			TiMQ mq2 = new TiMQ(gpio0, gpioPin0, adc0);
+			/*
+			 * 资源使用， 创建事件监听对象并设置事件监听 在事件监听中处理按键事件逻辑 TiMQ2
+			 * 使用的是硬件定点报警功能，即报警最低电压通过可变电阻设置，报警后可通过TiADC获取报警电压值。
+			 */
+			MQ2EventListener lc = new MQ2EventListener();
+			mq2.setEventListener(lc);
+
+			while (true) {
+				Delay.msDelay(1000);
+			}
+		} catch (IOException ie) {
+
+			ie.printStackTrace();
+		}
 	}
 }
