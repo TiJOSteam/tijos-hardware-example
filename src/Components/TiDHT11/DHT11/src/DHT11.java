@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.sensor.humiture.TiDHT;
+import tijos.framework.sensor.dht.TiDHT;
 import tijos.util.Delay;
 
 /**

@@ -1,9 +1,9 @@
 import tijos.framework.devicecenter.TiI2CMaster;
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.util.Delay;
-import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.distance.TiHCSR04;
+import tijos.framework.sensor.dht.TiDHT;
+import tijos.framework.sensor.hcsr.TiHCSR04;
 import tijos.framework.transducer.buzzer.TiBuzzer;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
