@@ -1,9 +1,9 @@
 import tijos.framework.devicecenter.TiI2CMaster;
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.util.Delay;
-import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.distance.TiHCSR04;
+import tijos.framework.sensor.dht.TiDHT;
+import tijos.framework.sensor.hcsr.TiHCSR04;
 import tijos.framework.transducer.buzzer.TiBuzzer;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
@@ -18,32 +18,93 @@ import java.text.DecimalFormat;
  *
  */
 class ButtonEventListener implements ITiButtonEventListener {
-	private boolean pressed = false;
-	private int pinID;
-
-	public ButtonEventListener(int buttonPinID) {
-		pinID = buttonPinID;
-	}
-
+	boolean _lock = false;
+	boolean _notify = false;
+	
 	/**
 	 * 按键按下事件处理
 	 */
-	public synchronized void onPressed(TiButton arg0) {
-		if (arg0.getSignalPinID() == pinID)
-			pressed = true;
+	public void onPressed(TiButton arg0) {
+		synchronized(this) {
+			this._lock = !this._lock;
+			this._notify = true;
+		}
 	}
 
 	/**
 	 * 按键释放事件处理
 	 */
-	public synchronized void onReleased(TiButton arg0) {
-		if (arg0.getSignalPinID() == pinID)
-			pressed = false;
+	public void onReleased(TiButton arg0) {
+	}
+	
+	public boolean isNotify() {
+		boolean notify = false;
+		synchronized(this) {
+			notify = this._notify;
+		}
+		return notify;
+	}
+	
+	public void clearNotify() {
+		synchronized(this) {
+			this._notify = false;
+		}
 	}
 
-	public synchronized boolean isPressed() {
-		return pressed;
+	public boolean checkLock() {
+		boolean lock = false;
+		synchronized(this) {
+			lock = this._lock;
+		}
+		return lock;
 	}
+}
+
+/**
+ * 温湿度监控线程
+ * 
+ * @author Andy
+ *
+ */
+class HumitureMonitor extends Thread {
+	TiDHT _dht11;
+	TiOLED_UG2864 _oled;
+	
+	public HumitureMonitor(TiDHT dht11, TiOLED_UG2864 oled) {
+		this._dht11 = dht11;
+		this._oled = oled;
+	}
+	
+	@Override
+    public void run() {
+		double tempLast = Double.NaN;
+		double humiLast = Double.NaN;
+		/*
+		 * 测量温湿度，并显示
+		 */
+        while(true) {
+        	try {
+        		this._dht11.measure();
+				double temp = this._dht11.getTemperature();
+				double humi = this._dht11.getHumidity();
+				
+				if(tempLast != temp) {
+					this._oled.print(0, 5, temp + "C ");
+					tempLast = temp;
+				}
+				
+				if(humiLast != humi) {				
+					this._oled.print(1, 5, humi + "% ");
+					humiLast = humi;
+				}
+				//延迟2秒再次采集温湿度
+				Delay.msDelay(2000);
+        	}
+        	catch(IOException e) {
+        		e.printStackTrace();
+        	}
+        }
+    }
 }
 
 /**
@@ -98,28 +159,20 @@ public class RangefinderSample {
 			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
 			TiHCSR04 distance = new TiHCSR04(gpio0, gpioPin3, gpioPin4);
 			TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
-			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6, false);
-			TiButton button = new TiButton(gpio0, gpioPin7, false);
-
-			/*
-			 * 创建事件监听实例并设置事件监听 在事件监听中设置按键消息
-			 */
-			ButtonEventListener lcButton = new ButtonEventListener(gpioPin7);
-			button.setEventListener(lcButton);
+			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6);
+			TiButton button = new TiButton(gpio0, gpioPin7);
 
 			/*
 			 * 资源使用 定义所需要的变量以及需要显示的菜单字符；
 			 */
-			boolean rstlock = false;
-			String distancelockvalue = "0";
-
 			buzzer.turnOff();
 
 			String sWelcome = "Welcome!";
 			String sModel = "TiOS-Rangefinder";
-			String sTemptrue = "TEMP:";
-			String sHumidity = "HUMI:";
-			String sDistance = "DISTANCE:    m";
+			
+			String sTemptrue = "TEMP:--";
+			String sHumidity = "HUMI:--";
+			String sDistance = "DISTANCE:--  m";
 			String sTips = "press to measure";
 			/*
 			 * TiOLED_UG2864屏幕初始操作： 1.开启屏幕 2.整屏清除 3.显示欢迎界面以及仪器型号
@@ -129,7 +182,7 @@ public class RangefinderSample {
 			oled.print(1, 3, sWelcome);
 			oled.print(2, 0, sModel);
 			
-			Delay.msDelay(1500);
+			Delay.msDelay(2000);
 
 			/*
 			 * 清屏后显示菜单字符，包括温度，湿度，距离以及操作提示
@@ -139,57 +192,67 @@ public class RangefinderSample {
 			oled.print(1, 0, sHumidity);
 			oled.print(2, 0, sDistance);
 			oled.print(3, 0, sTips);
+			
+			/*
+			 * 创建事件监听实例并设置事件监听 在事件监听中设置按键消息
+			 */
+			ButtonEventListener lcButton = new ButtonEventListener();
+			button.setEventListener(lcButton);
+			
+			/*
+			 * 创建并启动温湿度监控显示线程
+			 */
+			HumitureMonitor humMonitor = new HumitureMonitor(dht11, oled);
+			humMonitor.start();
 
 			/*
 			 * DecimalFormat用于数据截断
 			 */
 			DecimalFormat df = new DecimalFormat("#.##");
+			
+			/*
+			 * 测距开始
+			 */
 			while (true) {
-				/*
-				 * 测量温湿度数据，转换为字符后显示在屏幕对应位置
-				 */
-				dht11.measure();
-				String temp = String.valueOf(dht11.getTemperature());
-				String humi = String.valueOf(dht11.getHumidity());
-
-				oled.print(0, 5, temp + "C ");
-				oled.print(1, 5, humi + "% ");
 				/*
 				 * 测量距离值并截断到小数点后两位，保存到临时变量中
 				 */
-				distance.measure();
-				String distancevalue = df.format(distance.getDistance());
-				/*
-				 * 检测按键是否被按下并根据当前状态切换下一次的状态
-				 */
-				if (lcButton.isPressed()) {
-
-					buzzer.turnOn();
-					if (rstlock) {
-						rstlock = false;
-						distancelockvalue = "0";
-					} else {
-						rstlock = true;
-						distance.measure();
-						distancelockvalue = String.valueOf(df.format(distance.getDistance()));
-					}
-					
-					Delay.msDelay(150);
-					buzzer.turnOff();
+				distance.measure();	
+				double dis = distance.getDistance();
+				
+				String distancevalue = null;
+				if(Double.isNaN(dis)) {
+					distancevalue = " NaN";
 				}
+				else {
+					distancevalue = df.format(dis);
+				}
+				
 				/*
-				 * 根据按钮是否已经被按下选择动态显示所测距离还是已测的保存值
+				 * 检测测距使能按键是否按了
 				 */
-				if (rstlock) {
-					oled.print(2, 9, distancelockvalue);
-					oled.print(3, 9, "unlock ");
-				} else {
+				if (lcButton.isNotify()) {
+					//蜂鸣提示
+					buzzer.turnOn();
+					Delay.msDelay(100);
+					buzzer.turnOff();
+					
+					if(lcButton.checkLock()) {
+						oled.print(2, 9, distancevalue);
+						oled.print(3, 9, "unlock ");
+					}
+					else {
+						oled.print(3, 9, "measure");
+					}
+
+					lcButton.clearNotify();
+				}
+				
+				if(!lcButton.checkLock()) {
 					oled.print(2, 9, distancevalue);
-					oled.print(3, 9, "measure");
 				}
 			}
 		} catch (IOException ie) {
-
 			ie.printStackTrace();
 		}
 	}

@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.sensor.distance.TiHCSR04;
+import tijos.framework.sensor.hcsr.TiHCSR04;
 import tijos.util.Delay;
 
 /**

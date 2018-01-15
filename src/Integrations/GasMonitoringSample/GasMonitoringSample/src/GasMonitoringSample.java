@@ -4,28 +4,31 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.led.TiLED;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.framework.transducer.relay.TiRelay1CH;
+import tijos.util.Delay;
 import tijos.framework.transducer.buzzer.TiBuzzer;
-import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.gas.TiMQ;
-import tijos.framework.sensor.gas.ITiMQEventListener;
+import tijos.framework.sensor.dht.TiDHT;
+import tijos.framework.sensor.mq.TiMQ;
+import tijos.framework.sensor.mq.ITiMQEventListener;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
 
-/* 
+/**
  * 实现按钮监听接口，当有按钮事件发生时，通过状态设置方法关闭报警铃<br>
  * <p>
  * @author Jason
  *
  */
 class ButtonEventListener implements ITiButtonEventListener {
-
+	boolean _stop = false;
 	/**
 	 * 按键按下事件处理
 	 */
 	public void onPressed(TiButton arg0) {
-		GasMonitoringSample.stopAlarm();
+		synchronized(this) {
+			this._stop = true;
+		}
 	}
 
 	/**
@@ -33,9 +36,23 @@ class ButtonEventListener implements ITiButtonEventListener {
 	 */
 	public void onReleased(TiButton arg0) {
 	}
+	
+	public boolean isStop() {
+		boolean stop = false;
+		synchronized(this) {
+			stop = this._stop;
+		}
+		return stop;
+	}	
+	
+	public void clearStop() {
+		synchronized(this) {
+			this._stop = false;
+		}
+	}	
 }
 
-/*
+/**
  * 实现MQ2监听接口<br> <p>
  * 
  * @author Jason
@@ -43,24 +60,76 @@ class ButtonEventListener implements ITiButtonEventListener {
  */
 class MQ2EventListener implements ITiMQEventListener {
 
-	private TiMQ _mq2 = null;
-	private boolean _alarm = false;
+	TiMQ _mq2;
+	boolean _notify = true;
 
 	public void onThresholdNotify(TiMQ arg0) {
 		this._mq2 = arg0;
-		synchronized (this) {
-			try {
-				this._alarm = this._mq2.isGreaterThanThreshold();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		synchronized(this) {
+			this._notify = true;
 		}
 	}
 
-	public synchronized boolean isAlarm() {
-		return this._alarm;
+	public boolean isNotify() {
+		boolean notify = false;
+		synchronized(this) {
+			notify = this._notify;
+		}
+		return notify;
 	}
+	
+	public void clearNotify() {
+		synchronized(this) {
+			this._notify = false;
+		}
+	}	
+}
+
+/**
+ * 温湿度监控线程
+ * 
+ * @author Andy
+ *
+ */
+class HumitureMonitor extends Thread {
+	TiDHT _dht11;
+	TiOLED_UG2864 _oled;
+	
+	public HumitureMonitor(TiDHT dht11, TiOLED_UG2864 oled) {
+		this._dht11 = dht11;
+		this._oled = oled;
+	}
+	
+	@Override
+    public void run() {
+		double tempLast = Double.NaN;
+		double humiLast = Double.NaN;
+		/*
+		 * 测量温湿度，并显示
+		 */
+        while(true) {
+        	try {
+        		this._dht11.measure();
+				double temp = this._dht11.getTemperature();
+				double humi = this._dht11.getHumidity();
+				
+				if(tempLast != temp) {
+					this._oled.print(0, 5, temp + "C ");
+					tempLast = temp;
+				}
+				
+				if(humiLast != humi) {				
+					this._oled.print(1, 5, humi + "% ");
+					humiLast = humi;
+				}
+				//延迟2秒再次采集温湿度
+				Delay.msDelay(2000);
+        	}
+        	catch(IOException e) {
+        		e.printStackTrace();
+        	}
+        }
+    }
 }
 
 /**
@@ -84,12 +153,6 @@ public class GasMonitoringSample {
 	 * 
 	 * @param args 入口参数， TiJOS中一直等于null
 	 */
-	public static boolean isCanceled = false;
-
-	public static void stopAlarm() {
-		isCanceled = true;
-	}
-
 	public static void main(String[] args) {
 		try {
 			/*
@@ -120,24 +183,19 @@ public class GasMonitoringSample {
 			 * 创建TiButton实例button并将gpioPinID7与其绑定
 			 */
 			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
-			TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2, true);
+			TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2);
 			TiLED led = new TiLED(gpio0, gpioPin3);
 			TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
 			TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
-			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6, false);
-			TiButton button = new TiButton(gpio0, gpioPin7, false);
-
-			/*
-			 * 资源使用 关闭蜂鸣器 定义所需要的变量以及需要显示的菜单字符；
-			 */
-
-			buzzer.turnOff();
-
+			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6);
+			TiButton button = new TiButton(gpio0, gpioPin7);
+			
 			String sWelcome = "Welcome!";
 			String sModel = "Ti-GasMonitoring";
-			String sTemptrue = "TEMP:";
-			String sHumidity = "HUMI:";
-			String sMode = "MODE:       ";
+			
+			String sTemptrue = "TEMP:--";
+			String sHumidity = "HUMI:--";
+			String sMode = "MODE:-- ";
 			String sPrepare = "WAITING...";
 
 			/*
@@ -147,10 +205,9 @@ public class GasMonitoringSample {
 			oled.clear();
 			oled.print(1, 4, sWelcome);
 			oled.print(2, 0, sModel);
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-			}
+			
+			Delay.msDelay(1500);
+			
 			/*
 			 * 清屏后显示菜单字符，包括温度，湿度，工作模式以及报警提示
 			 */
@@ -162,69 +219,79 @@ public class GasMonitoringSample {
 			/*
 			 * 延时5秒，等待MQ2传感器加热、初始化
 			 */
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-			}
+			Delay.msDelay(5000);
+			
 			/*
 			 * 创建事件监听实例并设置事件监听 在事件监听中设置按键消息
 			 */
 			ButtonEventListener lcButton = new ButtonEventListener();
 			button.setEventListener(lcButton);
-
+			
 			MQ2EventListener lcMQ2 = new MQ2EventListener();
 			mq2.setEventListener(lcMQ2);
+			
+			/*
+			 * 创建并启动温湿度监控显示线程
+			 */
+			HumitureMonitor humMonitor = new HumitureMonitor(dht11, oled);
+			humMonitor.start();
 
 			/*
 			 * 最后打开继电器，模拟给电器供电
 			 */
 			relay.turnOn();
+			
+			/*
+			 * 主线程报警监控
+			 */	
+			boolean alarmReady = false;
 
-			while (true) {
-				/*
-				 * 测量温湿度，并显示
-				 */
-				dht11.measure();
-				String temp = String.valueOf(dht11.getTemperature());
-				String humi = String.valueOf(dht11.getHumidity());
-
-				oled.print(0, 5, temp + "C ");
-				oled.print(1, 5, humi + "% ");
-				/*
-				 * 发生可燃气体浓度高报警事件，并进行处理
-				 */
-				if (lcMQ2.isAlarm()) {
-					if (isCanceled) {
-						/*
-						 * 如果按钮被按下，则关闭蜂鸣器的报警，报警灯依旧闪烁，屏幕显示报警信息
-						 */
-						buzzer.turnOff();
-						led.turnOn();
-					} else {
-						buzzer.turnOn();
-						led.turnOn();
-					}
-					relay.turnOff();
-					oled.print(2, 5, "Alarm");
-					oled.print(3, 3, "WARNING!!!  ");
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-					buzzer.turnOff();
-					led.turnOff();
-				} else {
-					isCanceled = false;
-					buzzer.turnOff();
-					relay.turnOn();
-					led.turnOff();
-					oled.print(2, 5, "Safe ");
-					oled.print(3, 3, "WORKING ^_^  ");
-				}
-			}
+	        while(true) {
+	        	//气体检测通知
+	        	if(lcMQ2.isNotify()) {
+	        		alarmReady = mq2.isGreaterThanThreshold();
+	        		if(alarmReady) {
+	        			/*
+	        			 * 报警提示，继电器关闭，模拟切断电源
+	        			 */
+	        			relay.turnOff();
+						oled.print(2, 5, "Alarm");
+						oled.print(3, 3, "WARNING!!!  ");
+	        		}
+	        		else {
+	        			/*
+	        			 * 报警解除，继电器打开，模拟接通电源
+	        			 */
+	        			relay.turnOn();
+						oled.print(2, 5, "Safe ");
+						oled.print(3, 3, "WORKING ^_^  ");	        			
+	        		}
+	        		lcMQ2.clearNotify();
+	        	}
+	        	//报警检测
+	        	if(alarmReady) {
+	        		led.turnOver();
+	        		if(lcButton.isStop()) {
+	        			buzzer.turnOff();
+	        		}
+	        		else {
+		        		if(buzzer.isTurnedOn()) {
+		        			buzzer.turnOff();
+		        		}
+		        		else {
+		        			buzzer.turnOn();
+		        		}
+	        		}
+	        	}
+	        	else {
+	        		led.turnOff();
+	        		buzzer.turnOff();
+	        		lcButton.clearStop();
+	        	}
+	        	Delay.msDelay(500);       	
+	        }
 
 		} catch (IOException ie) {
-
 			ie.printStackTrace();
 		}
 	}

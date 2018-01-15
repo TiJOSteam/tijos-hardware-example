@@ -2,9 +2,9 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiADC;
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.sensor.gas.TiMQ;
+import tijos.framework.sensor.mq.TiMQ;
 import tijos.util.Delay;
-import tijos.framework.sensor.gas.ITiMQEventListener;
+import tijos.framework.sensor.mq.ITiMQEventListener;
 
 /**
  * 1.此类实现了ITiMQEventListener可燃气体浓度报警事件监听接口<br>

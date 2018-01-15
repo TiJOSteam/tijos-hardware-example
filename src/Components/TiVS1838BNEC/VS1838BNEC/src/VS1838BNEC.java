@@ -1,9 +1,9 @@
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.sensor.infrared.TiVS1838BNEC;
+import tijos.framework.sensor.vs1838b.TiVS1838BNEC;
 import tijos.util.Delay;
-import tijos.framework.sensor.infrared.ITiVS1838BNECEventListener;
+import tijos.framework.sensor.vs1838b.ITiVS1838BNECEventListener;
 
 /**
  * 1.此类实现了ITiVS1838BNECEventListener接收事件监听接口<br>

@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiI2CMaster;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.util.Delay;
 
 /**
@@ -29,9 +29,9 @@ public class OLED_UG2864 {
 			 */
 			int i2cPort0 = 0;
 			/*
-			 * 定义从机地址
+			 * 定义从机地址，不包含R/W位
 			 */
-			int i2cAssress = 0x78;
+			int i2cAssress = 0x78 >> 1;
 			/*
 			 * 资源分配， 将i2cPort0分配给TiI2CMaster对象i2c0
 			 */
