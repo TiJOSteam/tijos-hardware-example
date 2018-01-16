@@ -156,7 +156,7 @@ public class RangefinderSample {
 			 * 创建TiDHT实例dht11并将gpioPinID5与其绑定 创建TiBuzzer实例buzzer并将gpioPin6与其绑定
 			 * 创建TiButton实例button并将gpioPin7与其绑定
 			 */
-			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
+			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x3C);
 			TiHCSR04 distance = new TiHCSR04(gpio0, gpioPin3, gpioPin4);
 			TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
 			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6);

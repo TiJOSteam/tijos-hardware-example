@@ -182,7 +182,7 @@ public class GasMonitoringSample {
 			 * 创建TiBuzzer实例buzzer并将gpioPinID6与其绑定
 			 * 创建TiButton实例button并将gpioPinID7与其绑定
 			 */
-			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
+			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x3C);
 			TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2);
 			TiLED led = new TiLED(gpio0, gpioPin3);
 			TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
