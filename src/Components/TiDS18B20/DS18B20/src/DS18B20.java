@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiOWMaster;
-import tijos.framework.sensor.humiture.TiDS18B20;
+import tijos.framework.sensor.ds18b20.TiDS18B20;
 import tijos.util.Delay;
 
 /**

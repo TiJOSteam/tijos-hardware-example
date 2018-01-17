@@ -1,9 +1,9 @@
 import tijos.framework.devicecenter.TiI2CMaster;
 import tijos.framework.devicecenter.TiGPIO;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.util.Delay;
-import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.distance.TiHCSR04;
+import tijos.framework.sensor.dht.TiDHT;
+import tijos.framework.sensor.hcsr.TiHCSR04;
 import tijos.framework.transducer.buzzer.TiBuzzer;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
@@ -156,7 +156,7 @@ public class RangefinderSample {
 			 * 创建TiDHT实例dht11并将gpioPinID5与其绑定 创建TiBuzzer实例buzzer并将gpioPin6与其绑定
 			 * 创建TiButton实例button并将gpioPin7与其绑定
 			 */
-			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
+			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x3C);
 			TiHCSR04 distance = new TiHCSR04(gpio0, gpioPin3, gpioPin4);
 			TiDHT dht11 = new TiDHT(gpio0, gpioPin5);
 			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6);

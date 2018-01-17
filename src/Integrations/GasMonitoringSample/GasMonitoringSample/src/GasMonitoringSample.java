@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.led.TiLED;
-import tijos.framework.transducer.led.TiOLED_UG2864;
+import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.framework.transducer.relay.TiRelay1CH;
 import tijos.util.Delay;
 import tijos.framework.transducer.buzzer.TiBuzzer;
-import tijos.framework.sensor.humiture.TiDHT;
-import tijos.framework.sensor.gas.TiMQ;
-import tijos.framework.sensor.gas.ITiMQEventListener;
+import tijos.framework.sensor.dht.TiDHT;
+import tijos.framework.sensor.mq.TiMQ;
+import tijos.framework.sensor.mq.ITiMQEventListener;
 import tijos.framework.sensor.button.TiButton;
 import tijos.framework.sensor.button.ITiButtonEventListener;
 
@@ -182,7 +182,7 @@ public class GasMonitoringSample {
 			 * 创建TiBuzzer实例buzzer并将gpioPinID6与其绑定
 			 * 创建TiButton实例button并将gpioPinID7与其绑定
 			 */
-			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x78);
+			TiOLED_UG2864 oled = new TiOLED_UG2864(i2c0, 0x3C);
 			TiRelay1CH relay = new TiRelay1CH(gpio0, gpioPin2);
 			TiLED led = new TiLED(gpio0, gpioPin3);
 			TiMQ mq2 = new TiMQ(gpio0, gpioPin4);
@@ -190,9 +190,9 @@ public class GasMonitoringSample {
 			TiBuzzer buzzer = new TiBuzzer(gpio0, gpioPin6);
 			TiButton button = new TiButton(gpio0, gpioPin7);
 			
-
 			String sWelcome = "Welcome!";
 			String sModel = "Ti-GasMonitoring";
+			
 			String sTemptrue = "TEMP:--";
 			String sHumidity = "HUMI:--";
 			String sMode = "MODE:-- ";
@@ -251,10 +251,18 @@ public class GasMonitoringSample {
 	        	if(lcMQ2.isNotify()) {
 	        		alarmReady = mq2.isGreaterThanThreshold();
 	        		if(alarmReady) {
+	        			/*
+	        			 * 报警提示，继电器关闭，模拟切断电源
+	        			 */
+	        			relay.turnOff();
 						oled.print(2, 5, "Alarm");
 						oled.print(3, 3, "WARNING!!!  ");
 	        		}
 	        		else {
+	        			/*
+	        			 * 报警解除，继电器打开，模拟接通电源
+	        			 */
+	        			relay.turnOn();
 						oled.print(2, 5, "Safe ");
 						oled.print(3, 3, "WORKING ^_^  ");	        			
 	        		}
