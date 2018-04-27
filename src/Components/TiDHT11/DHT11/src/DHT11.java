@@ -2,7 +2,8 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.dht.TiDHT;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
+
 
 /**
  * 此类实现DHT11数字温湿度传感器采集温度、湿度的功能演示<br>

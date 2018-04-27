@@ -3,7 +3,7 @@ import java.io.IOException;
 import tijos.framework.devicecenter.TiADC;
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.mq.TiMQ;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 import tijos.framework.sensor.mq.ITiMQEventListener;
 
 /**
@@ -29,7 +29,7 @@ class MQ2EventListener implements ITiMQEventListener {
 			System.out.println(
 					"Notification of change of threshold value detection value, time(us):" + arg0.getEventTime());
 			System.out.println("Greater than threshold:" + arg0.isGreaterThanThreshold());
-			System.out.println("Analog voltage(V):" + arg0.getAnalogOutput());
+			System.out.println("Analog Output:" + arg0.getAnalogOutput());
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}
@@ -62,6 +62,12 @@ public class MQ2 {
 			 */
 			int adcPort0 = 0;
 			int gpioPort0 = 0;
+
+			/**
+			 * AD 通道
+			 */
+			int adc_chn = 0;
+			
 			/*
 			 * 定义所使用的gpioPin
 			 */
@@ -70,12 +76,16 @@ public class MQ2 {
 			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
 			 */
 			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
-			TiADC adc0 = TiADC.open(adcPort0);
+			TiADC adc0 = TiADC.open(adcPort0, adc_chn);
+			
+			//设置ADC参考电压 默认3.3V,   ESP8266 为1.0V
+			adc0.setRefVoltageValue(1.0);
+			
 			/*
 			 * 资源绑定， 创建TiMQ对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定 Pin0<---->D0
 			 * ADC <---->A0
 			 */
-			TiMQ mq2 = new TiMQ(gpio0, gpioPin0, adc0);
+			TiMQ mq2 = new TiMQ(gpio0, gpioPin0, adc0, adc_chn);
 			/*
 			 * 资源使用， 创建事件监听对象并设置事件监听 在事件监听中处理按键事件逻辑 TiMQ2
 			 * 使用的是硬件定点报警功能，即报警最低电压通过可变电阻设置，报警后可通过TiADC获取报警电压值。

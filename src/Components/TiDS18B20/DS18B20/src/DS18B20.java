@@ -2,7 +2,8 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiOWMaster;
 import tijos.framework.sensor.ds18b20.TiDS18B20;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
+
 
 /**
  * 此类实现单个DS18B20数字温度传感器采集温度的功能演示<br>

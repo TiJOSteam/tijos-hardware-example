@@ -1,28 +1,35 @@
-
 import java.io.IOException;
 
 import tijos.framework.devicecenter.TiADC;
 import tijos.framework.devicecenter.TiGPIO;
-
 import tijos.framework.sensor.general.ITiGeneralSensorEventListener;
 import tijos.framework.sensor.general.TiGeneralSensor;
 import tijos.framework.util.Delay;
 
-//通用传感器
 
-class GeneralSensorEventListener implements ITiGeneralSensorEventListener {
+class TrackerSensorEventListener implements ITiGeneralSensorEventListener {
 
 	@Override
-	public void onThresholdNotify(TiGeneralSensor arg0) {
-		System.out.println("GPIO Event");
+	public void onThresholdNotify(TiGeneralSensor sensor) {
 
+		try {
+			if (sensor.getDigitalOutput() == 1) {
+				System.out.println("GPIO Event - high ");				
+			}
+			else {
+				System.out.println("GPIO Event - low ");	
+			}
+		} catch (IOException ie) {
+
+		}
 	}
 
 }
 
-public class GeneralSensorSample {
+public class TrackerSensorSample {
 
 	public static void main(String[] args) {
+		 
 		try {
 			/*
 			 * 定义使用的TiGPIO port 定义使用的TiADC port
@@ -38,6 +45,7 @@ public class GeneralSensorSample {
 			 */
 			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 			TiADC adc0 = TiADC.open(adcPort0);
+			
 			/**
 			 * AD 通道0
 			 */
@@ -47,35 +55,28 @@ public class GeneralSensorSample {
 			 * 资源绑定， 创建TiGeneralSensor对象generalSensor并将gpioPort、
 			 * gpioPortPin和adcPort与其绑定 Pin0<---->D0 ADC <---->A0
 			 */
-			TiGeneralSensor generalSensor = new TiGeneralSensor(gpio0, gpioPin0, adc0, adc_chn);
+			TiGeneralSensor trackerSensor = new TiGeneralSensor(gpio0, gpioPin0, adc0, adc_chn);
 
 			/*
 			 * 资源使用， 创建事件监听对象并设置事件监听 在事件监听中处理事件逻辑
 			 */
-			GeneralSensorEventListener lc = new GeneralSensorEventListener();
-			generalSensor.setEventListener(lc);
+			TrackerSensorEventListener lc = new TrackerSensorEventListener();
+			trackerSensor.setEventListener(lc);
 
 			while (true) {
-				try {
-
-					double vol = generalSensor.getAnalogOutput();
-					System.out.println("Votagel: " + vol);
-
-					if (generalSensor.getDigitalOutput() == 1) {
-						System.out.println("high");
-					} else {
-						System.out.println("low");
-					}
-
-					Delay.msDelay(1000);
-				} catch (IOException e) {
-					e.printStackTrace();
+				if (trackerSensor.getDigitalOutput() == 1) {
+					System.out.println("DO high ");				
 				}
+				else {
+					System.out.println("DO low ");	
+				}
+				Delay.msDelay(1000);
 			}
 		} catch (IOException ie) {
 
 			ie.printStackTrace();
 		}
+
 	}
 
 }

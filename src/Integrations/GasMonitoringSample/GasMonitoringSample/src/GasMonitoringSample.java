@@ -6,7 +6,8 @@ import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.led.TiLED;
 import tijos.framework.transducer.oled.TiOLED_UG2864;
 import tijos.framework.transducer.relay.TiRelay1CH;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
+
 import tijos.framework.transducer.buzzer.TiBuzzer;
 import tijos.framework.sensor.dht.TiDHT;
 import tijos.framework.sensor.mq.TiMQ;

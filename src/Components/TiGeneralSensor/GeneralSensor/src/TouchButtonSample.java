@@ -3,6 +3,8 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.button.TiButton;
+import tijos.framework.util.Delay;
+
 import tijos.framework.sensor.button.ITiButtonEventListener;
 
 //触摸按键
@@ -55,11 +57,7 @@ public class TouchButtonSample {
 			buttonS1.setEventListener(lc);
 
 			while (true) {
-				try {
-
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				}
+				Delay.msDelay(10000);
 			}
 		} catch (IOException ie) {
 

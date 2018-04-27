@@ -2,7 +2,7 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.hcsr.TiHCSR04;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 
 /**
  * 此类实现TiHCSR04超声波测距传感器测量距离的功能演示<br>

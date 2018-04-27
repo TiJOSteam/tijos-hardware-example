@@ -2,7 +2,7 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.relay.TiRelay1CH;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 
 /**
  * 此类实现TiRelay1CH继电器控制功能演示<br>

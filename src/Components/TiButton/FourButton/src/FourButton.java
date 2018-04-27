@@ -2,7 +2,7 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.button.TiButton;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 import tijos.framework.sensor.button.ITiButtonEventListener;
 
 /**
