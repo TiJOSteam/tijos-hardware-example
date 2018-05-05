@@ -31,16 +31,18 @@ public class SoilSensorSample {
 			 * 定义所使用的gpioPin
 			 */
 			int gpioPin0 = 0;
-			/*
-			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
-			 */
-			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
-			TiADC adc0 = TiADC.open(adcPort0);
-			
 			/**
 			 * AD 通道0
 			 */
 			int adc_chn = 0;
+			
+			/*
+			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
+			 */
+			
+			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
+			TiADC adc0 = TiADC.open(adcPort0, adc_chn);
+			
 			
 			/*
 			 * 资源绑定， 创建TiGeneralSensor对象并将gpioPort、gpioPortPin和adcPort与其绑定
@@ -57,8 +59,8 @@ public class SoilSensorSample {
 			while (true) {
 				try {
 
-					double vol = soilSensor.getAnalogOutput();
-					System.out.println("Votagel: " + vol);
+					int ao = soilSensor.getAnalogOutput();
+					System.out.println("AO: " + ao);
 
 					if (soilSensor.getDigitalOutput() == 1) {
 						System.out.println("DO high");

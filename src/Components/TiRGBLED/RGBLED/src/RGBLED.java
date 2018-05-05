@@ -45,7 +45,6 @@ public class RGBLED {
 			 */
 			TiPWM pwm0 = TiPWM.open(pwmPort0, ch0, ch1, ch2);
 			
-			System.out.println("opened");
 			/*
 			 * 资源绑定， 创建TiRGBLED对象rgbled并将gpioPort和相应的(通道)ch与其对应的颜色绑定 red-----ch0
 			 * green---ch1 blue----ch2
@@ -58,8 +57,6 @@ public class RGBLED {
 			 */
 			Random random = new Random();
 			
-			System.out.println("setfreq");
-
 			rgbled.setFrequency(1000);
 			while (true) {
 				int r = 0, g = 0, b = 0;
@@ -72,6 +69,7 @@ public class RGBLED {
 				rgbled.setRedBrightness(r);
 				rgbled.setGreenBrightness(g);
 				rgbled.setBlueBrightness(b);
+				
 				// 亮度更新
 				rgbled.updateBrightness();
 

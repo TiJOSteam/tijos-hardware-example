@@ -33,15 +33,18 @@ public class GeneralSensorSample {
 			 * 定义所使用的gpioPin
 			 */
 			int gpioPin0 = 0;
-			/*
-			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
-			 */
-			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
-			TiADC adc0 = TiADC.open(adcPort0);
+			
 			/**
 			 * AD 通道0
 			 */
 			int adc_chn = 0;
+			
+			/*
+			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
+			 */
+			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
+			TiADC adc0 = TiADC.open(adcPort0, adc_chn);
+
 			
 			/*
 			 * 资源绑定， 创建TiGeneralSensor对象generalSensor并将gpioPort、
@@ -58,8 +61,8 @@ public class GeneralSensorSample {
 			while (true) {
 				try {
 
-					double vol = generalSensor.getAnalogOutput();
-					System.out.println("Votagel: " + vol);
+					int ao = generalSensor.getAnalogOutput();
+					System.out.println("AO: " + ao);
 
 					if (generalSensor.getDigitalOutput() == 1) {
 						System.out.println("high");

@@ -41,7 +41,7 @@ public class LightSensorSample {
 			 * 资源分配＿ 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
 			 */
 			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
-			TiADC adc0 = TiADC.open(adcPort0);
+			TiADC adc0 = TiADC.open(adcPort0, adc_chn);
 			/*
 			 * 资源绑定＿ 创建TiGeneralSensor对象并将gpioPort、gpioPortPin和adcPort与其绑定
 			 * Pin0<---->D0 ADC <---->A0
@@ -57,8 +57,8 @@ public class LightSensorSample {
 			while (true) {
 				try {
 
-					double vol = mk144.getAnalogOutput();
-					System.out.println("Votagel: " + vol);
+					int ao = mk144.getAnalogOutput();
+					System.out.println("AO: " + ao);
 
 					if (mk144.getDigitalOutput() == 1) {
 						System.out.println("DO High");
