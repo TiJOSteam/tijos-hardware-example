@@ -78,8 +78,8 @@ public class MQ2 {
 			TiGPIO gpio0 = TiGPIO.open(gpioPort0, gpioPin0);
 			TiADC adc0 = TiADC.open(adcPort0, adc_chn);
 			
-			//设置ADC参考电压 默认3.3V,   ESP8266 为1.0V
-			adc0.setRefVoltageValue(1.0);
+			//ESP8266 参考电压为1.0V
+			adc0.setRefVoltageValue(1.0, 5);
 			
 			/*
 			 * 资源绑定， 创建TiMQ对象mq2并将gpioPort、gpioPortPin和adcPort与其绑定 Pin0<---->D0
