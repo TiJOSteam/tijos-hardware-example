@@ -71,7 +71,7 @@ public class MQ2 {
 			/*
 			 * 定义所使用的gpioPin
 			 */
-			int gpioPin0 = 1;
+			int gpioPin0 = 0;
 			/*
 			 * 资源分配， 将gpioPort与gpioPin0分配给TiGPIO对象gpio0 将adcPort0分配给TiADC对象adc0
 			 */
