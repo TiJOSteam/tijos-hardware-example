@@ -123,8 +123,8 @@ class HumitureMonitor extends Thread {
 					this._oled.print(1, 5, humi + "% ");
 					humiLast = humi;
 				}
-				//延迟2秒再次采集温湿度
-				Delay.msDelay(2000);
+				//延迟2.5秒再次采集温湿度
+				Delay.msDelay(2500);
         	}
         	catch(IOException e) {
         		e.printStackTrace();
