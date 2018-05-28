@@ -1,6 +1,7 @@
 
 import tijos.framework.sensor.general.ITiGeneralSensorEventListener;
 import tijos.framework.sensor.general.TiGeneralSensor;
+import tijos.framework.util.Delay;
 
 import java.io.IOException;
 
@@ -55,8 +56,9 @@ public class HumanSensorSample {
 						System.out.println("No human");
 					}
 
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+					Delay.msDelay(1000);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 			

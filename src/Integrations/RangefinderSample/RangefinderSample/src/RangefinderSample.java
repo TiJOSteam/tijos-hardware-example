@@ -1,7 +1,7 @@
 import tijos.framework.devicecenter.TiI2CMaster;
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.oled.TiOLED_UG2864;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 import tijos.framework.sensor.dht.TiDHT;
 import tijos.framework.sensor.hcsr.TiHCSR04;
 import tijos.framework.transducer.buzzer.TiBuzzer;
@@ -97,8 +97,8 @@ class HumitureMonitor extends Thread {
 					this._oled.print(1, 5, humi + "% ");
 					humiLast = humi;
 				}
-				//延迟2秒再次采集温湿度
-				Delay.msDelay(2000);
+				//延迟2.5秒再次采集温湿度
+				Delay.msDelay(2500);
         	}
         	catch(IOException e) {
         		e.printStackTrace();
@@ -251,6 +251,8 @@ public class RangefinderSample {
 				if(!lcButton.checkLock()) {
 					oled.print(2, 9, distancevalue);
 				}
+				
+				Delay.msDelay(100);
 			}
 		} catch (IOException ie) {
 			ie.printStackTrace();

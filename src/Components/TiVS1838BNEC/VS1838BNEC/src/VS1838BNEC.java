@@ -2,7 +2,7 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.vs1838b.TiVS1838BNEC;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
 import tijos.framework.sensor.vs1838b.ITiVS1838BNECEventListener;
 
 /**

@@ -2,7 +2,8 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.sensor.dht.TiDHT;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
+
 
 /**
  * 此类实现DHT11数字温湿度传感器采集温度、湿度的功能演示<br>
@@ -61,7 +62,7 @@ public class DHT11 {
 					ie.printStackTrace();  
 				}
 	
-				Delay.msDelay(2000);// DHT11官方资料要求采集间隔至少2秒
+				Delay.msDelay(2500);// DHT11官方资料要求采集间隔至少2秒
 				
 			}
 		} catch (IOException ie) {

@@ -2,7 +2,8 @@ import java.io.IOException;
 
 import tijos.framework.devicecenter.TiGPIO;
 import tijos.framework.transducer.led.TiLED;
-import tijos.util.Delay;
+import tijos.framework.util.Delay;
+
 
 /**
  * 此类实现TiLED灯控制功能演示<br>
