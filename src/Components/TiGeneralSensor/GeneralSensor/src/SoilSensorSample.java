@@ -53,7 +53,7 @@ public class SoilSensorSample {
 			/*
 			 * 资源使用， 创建事件监听对象并设置事件监听 在事件监听中处理事件逻辑
 			 */
-			SoundSensorEventListener lc = new SoundSensorEventListener();
+			SoilSensorEventListener lc = new SoilSensorEventListener();
 			soilSensor.setEventListener(lc);
 
 			while (true) {
